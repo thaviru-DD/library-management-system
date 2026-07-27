@@ -37,7 +37,7 @@ export default function Login() {
               <HttpsIcon sx={{ color: 'gray',fontSize: '20px' }} />
               <label className='text-text-primary' htmlFor="password">Password</label>
             </div>
-            <input type="text" className='border-b' required/>
+            <input type="password" className='border-b' required/>
           </div>
 
           <div className='flex justify-center flex-col gap-1'>
