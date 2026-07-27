@@ -13,8 +13,14 @@ export default function Login() {
    <div className='flex justify-center items-center min-h-screen'>
     <div className='w-[600px]   rounded-xl p-10 shadow-lg bg-bg-light'>
 
-      <form action="" className=''>
+      <form action="" className='flex gap-10'>
 
+        <div className='w-[40%] text-center flex flex-col gap-15 items-center'>
+          <h1 className='text-2xl font-bold text-blue-950'>LIBRARY SYSTEM</h1>
+          <Avatar sx={{ width: 100, height: 100, background: '#FB6C00' }}>
+            <LibraryBooksIcon fontSize='large'/>
+          </Avatar>
+        </div>
 
         <div className='w-[55%] flex flex-col gap-6'>
             <div className='flex flex-col gap-4'>

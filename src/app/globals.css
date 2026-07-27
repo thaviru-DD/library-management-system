@@ -1,19 +1,26 @@
 @import "tailwindcss";
 
+
 @theme {
-  --color-primary: #E73F1E;        /* your red-orange, for buttons/links */
-  --color-primary-hover: #C7330F;  /* darker shade for hover state */
-  --color-secondary: #FB6C00;      /* your orange, for secondary accents */
-  --color-secondary-hover: #E05F00;
-
-  --color-background: #FFDD9C;     /* your peach, good for page bg */
-  --color-surface: #FFFFFF;        /* white, for cards/navbar on top of bg */
-
-  --color-text: #2A1B0F;           /* dark brown-black, NOT orange — for body text */
-  --color-text-secondary: #6B5B47; /* muted brown-gray, for less important text */
-
-  --color-border: #F0C87A;         /* slightly darker than bg, for subtle dividers */
-
-  --color-success: #16A34A;
-  --color-danger: #DC2626;
-}
+    /* Gradient */
+    --color-cyan: #06B6D4;
+    --color-blue: #3B82F6;
+  
+    /* Backgrounds */
+    --color-bg-light: #F0F9FF;
+    --color-bg-dark: #0F172A;
+    --color-surface: #F8FAFC;
+    --color-surface-dark: #1E293B;
+  
+    /* Text */
+    --color-text-primary: #0F172A;
+    --color-text-secondary: #64748B;
+  
+    /* Accent + states */
+    --color-accent: #F59E0B;
+    --color-success: #10B981;
+    --color-error: #F43F5E;
+  
+    /* Borders */
+    --color-border: #E2E8F0;
+  }

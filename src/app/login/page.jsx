@@ -1,9 +1,10 @@
+import LoginForm from '@/components/auth/Login'
 import React from 'react'
 
 function page() {
   return (
     <div>
-      Login page
+      <LoginForm />
     </div>
   )
 }
