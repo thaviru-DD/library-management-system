@@ -1,10 +1,12 @@
 import React from 'react'
+import { Box } from '@mui/material'
+import Sidebar from '@/components/shared/Sidebar'
 
 function page() {
   return (
-    <div>
-      <h1>admin/books</h1>
-    </div>
+    <Box sx={{ display: 'flex' }}>
+      <Sidebar />
+    </Box>
   )
 }
 
