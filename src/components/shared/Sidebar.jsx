@@ -1,94 +1,76 @@
-'use client';
+import React from 'react'
 
-import Drawer from '@mui/material/Drawer';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Toolbar from '@mui/material/Toolbar';
-import Box from '@mui/material/Box';
-
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import MenuBookIcon from '@mui/icons-material/MenuBook';
-import CategoryIcon from '@mui/icons-material/Category';
-import PeopleIcon from '@mui/icons-material/People';
-import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
-import Typography from '@mui/material/Typography';
-import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
+// Side bar navigation icons
+import HomeFilledIcon from '@mui/icons-material/HomeFilled';
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
+import SimCardDownloadIcon from '@mui/icons-material/SimCardDownload';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import SettingsApplicationsIcon from '@mui/icons-material/SettingsApplications';
+import HelpIcon from '@mui/icons-material/Help';
 import LogoutIcon from '@mui/icons-material/Logout';
-import Link from 'next/link';
 
-const DRAWER_WIDTH = 240;
 
+// Sidebar navigation items
 const navItems = [
-  { label: 'Dashboard', icon: <DashboardIcon />, href: '/admin' },
-  { label: 'Book Management', icon: <MenuBookIcon />, href: '/admin/books' },
-  { label: 'Category Management', icon: <CategoryIcon />, href: '/admin/categories' },
-  { label: 'User Management', icon: <PeopleIcon />, href: '/admin/users' },
+  { icon: <HomeFilledIcon/>, label: 'Discover', link: '/' },
+  { icon: <DragIndicatorIcon/>, label: 'Category', link: '/' },
+  { icon: <BookmarkIcon/>, label: 'My Library', link: '/' },
+  { icon: <SimCardDownloadIcon/>, label: 'Download', link: '/' },
+  { icon: <FavoriteIcon/>, label: 'Favourite', link: '/' },
+]
+
+const bottomNavItems = [
+  { icon: <SettingsApplicationsIcon />, label: 'Setting', link: '/' },
+  { icon: <HelpIcon />, label: 'Help', link: '/' },
+  { icon: <LogoutIcon />, label: 'Log out', link: '/' },
 ];
 
-export default function Sidebar() {
+
+function Sidebar() {
   return (
-    <Drawer
-      variant="permanent"
-      sx={{
-        width: DRAWER_WIDTH,
-        flexShrink: 0,
-        '& .MuiDrawer-paper': {
-          width: DRAWER_WIDTH,
-          boxSizing: 'border-box',
-          bgcolor: '#1F150C',   // your espresso tone
-          color: '#E1DCC9',     // parchment text
-        },
-      }}
-    >
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, px: 2, py: 3 }}>
-         <LibraryBooksIcon sx={{ color: '#E1DCC9', fontSize: 28 }} />
-        <Typography sx={{ color: '#E1DCC9', fontWeight: 700, fontSize: '1.1rem' }}>
-            Library System
-         </Typography>
-        </Box>
-      <Toolbar /> {/* spacer, matches AppBar height if you have one */}
-      <List>
+    <div className='top-0 left-0 w-64 h-screen bg-white p-5 z-20 '>
+
+      <h1 className='font-bold text-2xl'>THE BOOK</h1>
+      <h3 className='text-gray-400 mt-5'>MENU</h3>
+
+      <div className='mt-8 flex flex-col gap-10'>
+
         {navItems.map((item) => (
-          <ListItem key={item.label} disablePadding>
-            <ListItemButton component={Link} href={item.href}>
-              <ListItemIcon sx={{ color: '#E1DCC9' }}>
-                {item.icon}
-              </ListItemIcon>
-              <ListItemText primary={item.label} />
-            </ListItemButton>
-          </ListItem>
+          <div key={item.label} className='group cursor-pointer'>
+
+            <div className='inline bg-gray-200 text-gray-500 px-3 pt-2 pb-3 rounded-lg transition-all duration-300 group-hover:shadow-xl group-hover:bg-orange-500 group-hover:text-white'>
+              {item.icon}
+            </div>
+
+            <span className='ml-2 text-gray-600 transition-all duration-300 group-hover:text-black'>{item.label}</span>
+          </div>
         ))}
-      </List>
-      <Box
-  sx={{
-    mt: 'auto', // <-- pushes this block to the bottom, explained below
-    display: 'flex',
-    alignItems: 'center',
-    gap: 1.5,
-    px: 2,
-    py: 2,
-    borderTop: '1px solid rgba(225,220,201,0.15)',
-  }}
->
-  <Avatar sx={{ width: 36, height: 36, bgcolor: '#412D15' }}>H</Avatar>
 
-  <Box sx={{ flexGrow: 1, minWidth: 0 }}>
-    <Typography sx={{ color: '#E1DCC9', fontSize: '0.85rem', fontWeight: 600 }} noWrap>
-      Head Librarian
-    </Typography>
-    <Typography sx={{ color: 'rgba(225,220,201,0.6)', fontSize: '0.75rem' }}>
-      Librarian
-    </Typography>
-  </Box>
+        <div className="h-px w-45 bg-gray-300 my-5"></div>
 
-  <IconButton size="small" sx={{ color: '#E1DCC9' }}>
-    <LogoutIcon fontSize="small" />
-  </IconButton>
-</Box>
-    </Drawer>
-  );
+        {bottomNavItems.map((item) => (
+          <div key={item.label} className='group cursor-pointer'>
+
+            <div className='inline bg-gray-200 text-gray-500 px-3 pt-2 pb-3 rounded-lg transition-all duration-300 group-hover:shadow-xl group-hover:bg-orange-500 group-hover:text-white'>
+              {item.icon}
+            </div>
+
+            <span className='ml-2 text-gray-600 transition-all duration-300 group-hover:text-black'>{item.label}</span>
+          </div>
+        ))}
+
+        
+
+      </div>
+
+      {/* <div className='w-40'>
+        <div className='w-40 h-40 bg-purple-400 rounded-2xl'></div>
+        <h3 className='text-center mt-2 text-gray-600'>BOOK LIBRARY</h3>
+      </div> */}
+
+    </div>
+  )
 }
+
+export default Sidebar

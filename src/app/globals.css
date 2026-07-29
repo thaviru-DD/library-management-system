@@ -1,26 +1,9 @@
 @import "tailwindcss";
 
 
-@theme {
-    /* Gradient */
-    --color-cyan: #06B6D4;
-    --color-blue: #3B82F6;
-  
-    /* Backgrounds */
-    --color-bg-light: #F0F9FF;
-    --color-bg-dark: #0F172A;
-    --color-surface: #F8FAFC;
-    --color-surface-dark: #1E293B;
-  
-    /* Text */
-    --color-text-primary: #0F172A;
-    --color-text-secondary: #64748B;
-  
-    /* Accent + states */
-    --color-accent: #F59E0B;
-    --color-success: #10B981;
-    --color-error: #F43F5E;
-  
-    /* Borders */
-    --color-border: #E2E8F0;
+  @theme {
+    --color-ink: #41431B; /* Primary text, primary buutons and active nav status */
+    --color-moss: #AEB784; /* Secondary accents, hover states, tag borders */
+    --color-parchment: #E3DBBB; /* Highlight/section blocks */
+    --color-ivory: #F8F3E1; /* Tertiary — very soft fill */
   }
