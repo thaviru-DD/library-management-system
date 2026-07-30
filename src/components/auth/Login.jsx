@@ -99,40 +99,40 @@ export default function Login() {
             <div  className='w-[50%] px-30 py-20'>
                 <form>
                     <div>
-                        <h1 className='text-center text-4xl'>Login to your account</h1>
-                        <h5 className='text-center mt-4'>Welcome back to library. Please enter your details</h5>
+                        <h1 className='text-center text-4xl text-ink font-bold'>Login to your account</h1>
+                        <h5 className='text-center mt-4 text-ink'>Welcome back to library. Please enter your details</h5>
                     </div>
 
                     <div className='mt-10'>
 
                         <div className='flex flex-col gap-3 mb-5'>
-                            <label htmlFor="name" className='px-3'>Email</label>
-                            <input type="text" className='bg-white h-12 rounded-4xl shadow-lg placeholder:p-3' placeholder='yourname@gmail.com' />
+                            <label htmlFor="name" className='px-3 text-ink font-bold'>Email</label>
+                            <input type="text" className='bg-white h-12 rounded-4xl shadow-lg placeholder:p-3 border border-gray-200' placeholder='yourname@gmail.com' />
                         </div>
 
                         <div className='flex flex-col gap-3 mb-5 relative'>
-                            <label htmlFor="name" className='px-3'>Password</label>
+                            <label htmlFor="name" className='px-3 text-ink font-bold'>Password</label>
                             <VisibilityOffIcon className='absolute right-6 top-12' sx={{color: 'gray', fontSize:'20px'}}/>
-                            <input type="text" className='bg-white h-12 rounded-4xl shadow-lg placeholder:p-3' placeholder='*******************' />
+                            <input type="text" className='bg-white h-12 rounded-4xl shadow-lg placeholder:p-3 border border-gray-200' placeholder='*******************' />
                         </div>
 
                         <h4 className='underline text-end text-gray-700 text-sm'>Forgot password?</h4>
                     </div>
 
                     <div className='mt-10'>
-                                            <input type="submit" className='bg-yellow-300 w-full h-12 rounded-4xl shadow-lg hover: cursor-pointer'/>
-                                            <div className='flex justify-between gap-2 mt-5'>
-                                                <button className='h-12 border-1 w-full rounded-4xl flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors'>
-                                                    <Image src={appleIcon} alt='Apple icon' width={20} height={20} />
-                                                    Apple
-                                                </button>
+                        <input type="submit" className='bg-ink w-full h-12 rounded-4xl shadow-lg hover: cursor-pointer text-white hover:bg-moss'/>
+                            <div className='flex justify-between gap-2 mt-5'>
+                                <button className='h-12 border-1 w-full rounded-4xl flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors'>
+                                  <Image src={appleIcon} alt='Apple icon' width={20} height={20} />
+                                      Apple
+                                </button>
                     
-                                                <button className='h-12 border-1 w-full rounded-4xl flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors'>
-                                                    <Image src={googleIcon} alt='Google icon' width={20} height={20} />
-                                                    Google
-                                                </button>
-                                            </div>
-                                        </div>
+                                <button className='h-12 border-1 w-full rounded-4xl flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors'>
+                                  <Image src={googleIcon} alt='Google icon' width={20} height={20} />
+                                    Google
+                                </button>
+                            </div>
+                    </div>
 
                     
 

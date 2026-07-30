@@ -16,7 +16,7 @@ export default function BookCard({ book }) {
             <h2 className="text-center font-bold">{book.title}</h2>
             <p className="text-center">{book.author}</p>
 
-            <button onClick={() => setShowDetails(true)} className="bg-orange-500 text-white px-5 py-1 rounded-lg mt-2">View</button>
+            <button onClick={() => setShowDetails(true)} className="bg-ink text-white px-5 py-1 rounded-lg mt-2 cursor-pointer hover:bg-moss">View Details</button>
 
 
             {/* Modal */}
@@ -93,7 +93,7 @@ export default function BookCard({ book }) {
                 {/* Buy Button */}
                 <Button
                     name="Buy Now"
-                    style="bg-green-600 text-white px-6 py-2 rounded-lg mt-5 hover:bg-green-700"
+                    style="bg-ink text-white px-6 py-2 rounded-lg mt-5 hover:bg-moss"
                     onClick={() => console.log("Buying book")}
                 />
 

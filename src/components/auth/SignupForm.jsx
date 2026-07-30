@@ -98,30 +98,30 @@ export default function Login() {
             <div  className='w-[50%] px-30 py-20'>
                 <form>
                     <div>
-                        <h1 className='text-center text-4xl'>Create an account</h1>
-                        <h5 className='text-center mt-3'>Sign up and create new account</h5>
+                        <h1 className='text-center text-4xl text-ink font-bold'>Create an account</h1>
+                        <h5 className='text-center mt-3 text-ink'>Sign up and create new account</h5>
                     </div>
 
                     <div className='mt-15'>
                         <div className='flex flex-col gap-3 mb-5'>
-                            <label htmlFor="name" className='px-3'>Full name</label>
-                            <input type="text" className='bg-white h-12 rounded-4xl shadow-lg placeholder:p-3' placeholder='Thaviru De Silva' />
+                            <label htmlFor="name" className='px-3 text-ink font-bold'>Full name</label>
+                            <input type="text" className='bg-white h-12 rounded-4xl shadow-lg placeholder:p-3 border border-gray-200' placeholder='Thaviru De Silva' />
                         </div>
 
                         <div className='flex flex-col gap-3 mb-5'>
-                            <label htmlFor="name" className='px-3'>Email</label>
-                            <input type="text" className='bg-white h-12 rounded-4xl shadow-lg placeholder:p-3' placeholder='abcd@gmail.com' />
+                            <label htmlFor="name" className='px-3 text-ink font-bold'>Email</label>
+                            <input type="text" className='bg-white h-12 rounded-4xl shadow-lg placeholder:p-3 border border-gray-200' placeholder='abcd@gmail.com' />
                         </div>
 
                         <div className='flex flex-col gap-3 mb-5 relative'>
-                            <label htmlFor="name" className='px-3'>Password</label>
+                            <label htmlFor="name" className='px-3 text-ink font-bold'>Password</label>
                             <VisibilityOffIcon className='absolute right-6 top-12' sx={{color: 'gray', fontSize:'20px'}}/>
-                            <input type="text" className='bg-white h-12 rounded-4xl shadow-lg placeholder:p-3' placeholder='***************' />
+                            <input type="text" className='bg-white h-12 rounded-4xl shadow-lg placeholder:p-3 border border-gray-200' placeholder='***************' />
                         </div>
                     </div>
 
                     <div className='mt-10'>
-                        <input type="submit" className='bg-yellow-300 w-full h-12 rounded-4xl shadow-lg hover: cursor-pointer'/>
+                        <input type="submit" className='bg-ink w-full h-12 rounded-4xl shadow-lg text-white hover:cursor-pointer hover:bg-moss'/>
                         <div className='flex justify-between gap-2 mt-5'>
                             <button className='h-12 border-1 w-full rounded-4xl flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors'>
                                 <Image src={appleIcon} alt='Apple icon' width={20} height={20} />
