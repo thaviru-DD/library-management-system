@@ -7,6 +7,7 @@ import Avatar from '@mui/material/Avatar';
 import Image from 'next/image';
 import { motion } from 'framer-motion'
 import BookCard from '@/components/user/BookCard';
+import Link from 'next/link';
 
 function Page() {
   return (
@@ -21,7 +22,9 @@ function Page() {
           <div className="flex justify-between items-center">
             <h1 className="font-bold text-4xl">Discover</h1>
             <div className='flex gap-6 items-center'>
-              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+              <Link href="/profile">
+                <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" >T</Avatar>
+              </Link>
               <NotificationsActiveOutlinedIcon/>
             </div>
           </div>

@@ -1,53 +1,35 @@
-'use client';
-
-import Box from '@mui/material/Box';
-import Avatar from '@mui/material/Avatar';
-
 const recentActivity = [
-  { id: 1, name: 'Samith Gomaz', role: 'Librarian', avatar: '/avatars/amelie.jpg' },
-  { id: 2, name: 'Thaviru De Silva', role: 'Librarian', avatar: '/avatars/amelie.jpg' },
-  { id: 3, name: 'Uvini Ayathma', role: 'Librarian', avatar: '/avatars/amelie.jpg' },
+  { id: 1, name: 'Amélie Laurent', role: 'Librarian', avatar: null },
+  { id: 2, name: 'Davis Workman', role: 'Librarian', avatar: null },
+  { id: 3, name: 'Thaviru Perera', role: 'Member', avatar: null },
 ];
 
 export default function RecentUserActivity() {
   return (
-    <Box>
-      <div className='bg-white shadow-lg rounded-xl p-5'>
-        <h1 className='text-2xl font-bold mb-5'>Recent User Activity</h1>
+    <div className='bg-white shadow-sm border border-gray-100 rounded-2xl p-6 h-full'>
+      <h2 className='text-lg font-bold text-[#41431B] mb-4'>Recent User Activity</h2>
 
-        <div className='flex flex-col gap-3'>
-
-          {/* Header row */}
-          <div className='flex items-center bg-gray-100 p-3 rounded-lg'>
-            <h3 className='flex-1 font-bold'>Recent User</h3>
-            <h3 className='w-32 text-center font-bold'>Role</h3>
-            <h3 className='w-32 text-center font-bold'>Actions</h3>
-          </div>
-
-          {/* Data rows */}
-          {recentActivity.map((user, index) => (
-            <div key={user.id}>
-              <div className='flex items-center p-3'>
-                <div className='flex items-center gap-3 flex-1'>
-                  <Avatar src={user.avatar} alt={user.name} sx={{ width: 36, height: 36 }} />
-                  <div className='flex flex-col'>
-                    <span className='font-medium'>{user.name}</span>
-                    <span className='text-sm text-gray-500'>{user.role}</span>
-                  </div>
-                </div>
-                <h3 className='w-32 text-center'>{user.role}</h3>
-                <div className='w-32 flex justify-center'>
-                  <button className='text-sm border border-gray-300 rounded-md px-3 py-1 hover:bg-gray-50 transition-colors'>
-                    Reserve Status
-                  </button>
-                </div>
+      <div className='flex flex-col'>
+        {recentActivity.map((user, index) => (
+          <div key={user.id}>
+            <div className='flex items-center py-3'>
+              <div className='w-9 h-9 rounded-full bg-[#E3DBBB] text-[#41431B] flex items-center justify-center font-semibold text-sm shrink-0'>
+                {user.name.charAt(0)}
               </div>
-              {index < recentActivity.length - 1 && <hr />}
-            </div>
-          ))}
 
-        </div>
+              <div className='ml-3 flex-1 min-w-0'>
+                <p className='font-medium text-sm truncate'>{user.name}</p>
+                <p className='text-xs text-gray-500'>{user.role}</p>
+              </div>
+
+              <button className='text-xs border border-gray-200 rounded-md px-3 py-1 text-gray-600 hover:bg-[#F8F3E1] hover:border-[#E3DBBB] transition-colors shrink-0'>
+                View
+              </button>
+            </div>
+            {index < recentActivity.length - 1 && <hr className='border-gray-100' />}
+          </div>
+        ))}
       </div>
-    </Box>
+    </div>
   );
 }
