@@ -16,7 +16,7 @@ import LibraryBooksOutlinedIcon from '@mui/icons-material/LibraryBooksOutlined';
 import GroupAddOutlinedIcon from '@mui/icons-material/GroupAddOutlined';
 import EventNoteOutlinedIcon from '@mui/icons-material/EventNoteOutlined';
 import BookmarksOutlinedIcon from '@mui/icons-material/BookmarksOutlined';
-// import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -119,7 +119,7 @@ export default function AdminDashboard() {
           className="flex gap-4"
         >
           <button className="flex items-center gap-2 bg-white px-5 py-2.5 rounded-xl border border-gray-200 shadow-sm hover:border-[#AEB784] hover:shadow-md transition-all text-sm font-semibold text-gray-700">
-            {/* <AddCircleOutlineIcon fontSize="small" className="text-[#AEB784]" /> Add New Book */}
+            <AddCircleOutlineOutlinedIcon fontSize="small" className="text-[#AEB784]" /> Add New Book
           </button>
           
           {/* UPDATED BUTTON: Opens the Modal onClick */}

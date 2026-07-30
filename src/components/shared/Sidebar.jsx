@@ -34,7 +34,7 @@ function Sidebar() {
       <h1 className='font-bold text-2xl'>THE BOOK</h1>
       <h3 className='text-gray-400 mt-5'>MENU</h3>
 
-      <div className='mt-8 flex flex-col gap-10'>
+      <div className='mt-8 flex flex-col gap-5'>
 
         {navItems.map((item) => (
           <Link href={item.link} key={item.label} className='group cursor-pointer flex items-center'>

@@ -59,7 +59,7 @@ function Page() {
           <h1 className='text-gray-700 text-2xl mb-5'>Popular books</h1>
           <div className='flex justify-between items-center flex-wrap gap-6'>
             <BookCard book={{ title: 'Sapiens', author: 'Yuval Noah Harari', image: '/bookCovers/book1.jpg', price: '2500', description: "Lorem ipsum dolor sit amet consectetur adipisicing elit." }} />
-            <BookCard book={{ title: '1984', author: 'George Orwell', image: '/bookCovers/book10.jpg', price: '3500', description: "Lorem ipsum dolor sit amet consectetur adipisicing elit." }} />
+            <BookCard book={{ title: 'Atomic Habits', author: 'George Orwell', image: '/bookCovers/book10.jpg', price: '3500', description: "Lorem ipsum dolor sit amet consectetur adipisicing elit." }} />
             <BookCard book={{ title: 'Dune', author: 'Frank Herbert', image: '/bookCovers/book3.jpg', price: '4800', description: "Lorem ipsum dolor sit amet consectetur adipisicing elit." }} />
             <BookCard book={{ title: 'Sapiens', author: 'Amélie Laurent', image: '/bookCovers/book4.jpeg', price: '4500', description: "Lorem ipsum dolor sit amet consectetur adipisicing elit." }} />
           </div>
