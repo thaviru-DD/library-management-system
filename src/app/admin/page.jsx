@@ -22,6 +22,7 @@ import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import CloseIcon from '@mui/icons-material/Close';
+import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 
 
 const stats = [
@@ -51,8 +52,10 @@ const itemVariants = {
 
 export default function AdminDashboard() {
   const [searchQuery, setSearchQuery] = useState('');
-  // STATE: Controls whether the register modal is open or closed
+  
+  // MODAL STATES
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+  const [isAddBookModalOpen, setIsAddBookModalOpen] = useState(false);
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -118,11 +121,14 @@ export default function AdminDashboard() {
           transition={{ delay: 0.2 }}
           className="flex gap-4"
         >
-          <button className="flex items-center gap-2 bg-white px-5 py-2.5 rounded-xl border border-gray-200 shadow-sm hover:border-[#AEB784] hover:shadow-md transition-all text-sm font-semibold text-gray-700">
+          {/* UPDATED BUTTON: Opens the Add Book Modal onClick */}
+          <button 
+            onClick={() => setIsAddBookModalOpen(true)}
+            className="flex items-center gap-2 bg-white px-5 py-2.5 rounded-xl border border-gray-200 shadow-sm hover:border-[#AEB784] hover:shadow-md transition-all text-sm font-semibold text-gray-700"
+          >
             <AddCircleOutlineOutlinedIcon fontSize="small" className="text-[#AEB784]" /> Add New Book
           </button>
           
-          {/* UPDATED BUTTON: Opens the Modal onClick */}
           <button 
             onClick={() => setIsRegisterModalOpen(true)}
             className="flex items-center gap-2 bg-white px-5 py-2.5 rounded-xl border border-gray-200 shadow-sm hover:border-[#AEB784] hover:shadow-md transition-all text-sm font-semibold text-gray-700"
@@ -135,7 +141,7 @@ export default function AdminDashboard() {
           </button>
         </motion.div>
 
-        {/* STAT CARDS (Code remains exactly the same) */}
+        {/* STAT CARDS */}
         <motion.div variants={containerVariants} initial="hidden" animate="show" className="grid grid-cols-4 gap-6">
           {stats.map((stat) => (
             <motion.div key={stat.label} variants={itemVariants} whileHover={{ y: -5 }} className="bg-white shadow-sm hover:shadow-md border border-gray-100 rounded-2xl p-6 flex flex-col justify-between transition-shadow relative overflow-hidden">
@@ -155,7 +161,7 @@ export default function AdminDashboard() {
           ))}
         </motion.div>
 
-        {/* MAIN CONTENT GRID (Code remains exactly the same) */}
+        {/* MAIN CONTENT GRID */}
         <div className="grid grid-cols-3 gap-8 items-start">
           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.4 }} className="col-span-2 bg-white shadow-sm border border-gray-100 rounded-3xl p-7">
             <div className="flex justify-between items-center mb-6">
@@ -211,21 +217,38 @@ export default function AdminDashboard() {
 
       </main>
 
-      {/* MODAL COMPONENT INTEGRATION */}
+      {/* MODAL COMPONENTS */}
       <RegisterUserModal 
         isOpen={isRegisterModalOpen} 
         onClose={() => setIsRegisterModalOpen(false)} 
+      />
+
+      <AddBookModal 
+        isOpen={isAddBookModalOpen} 
+        onClose={() => setIsAddBookModalOpen(false)} 
       />
     </div>
   );
 }
 
-// register user Modal
-function RegisterUserModal({ isOpen, onClose }) {
-  
+
+// ---------------------------------------------------------
+// ADD BOOK MODAL COMPONENT
+// ---------------------------------------------------------
+function AddBookModal({ isOpen, onClose }) {
+  const [previewImage, setPreviewImage] = useState(null);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setPreviewImage(URL.createObjectURL(file));
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+    // Add logic to save book here
+    setPreviewImage(null);
     onClose();
   };
 
@@ -234,7 +257,112 @@ function RegisterUserModal({ isOpen, onClose }) {
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           
-          {/* Backdrop */}
+          <motion.div 
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+          />
+
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            transition={{ type: "spring", bounce: 0, duration: 0.4 }}
+            className="relative bg-white w-full max-w-lg rounded-3xl shadow-2xl p-8 z-10"
+          >
+            <div className="flex justify-between items-center mb-6">
+              <div>
+                <h2 className="text-2xl font-bold text-[#41431B]">Add New Book</h2>
+                <p className="text-sm text-gray-500 mt-1">Add a new book to the library inventory.</p>
+              </div>
+              <button onClick={onClose} className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 transition-colors">
+                <CloseIcon fontSize="small" />
+              </button>
+            </div>
+
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+              
+              {/* Cover Image Upload */}
+              <div className="flex gap-6 items-center bg-gray-50 p-4 rounded-2xl border border-dashed border-gray-300">
+                <div className="relative w-16 h-24 bg-gray-200 rounded-lg overflow-hidden shadow-sm border border-gray-100 flex-shrink-0">
+                  {previewImage ? (
+                    <Image src={previewImage} alt="Preview" fill className="object-cover" />
+                  ) : (
+                    <div className="flex items-center justify-center w-full h-full text-gray-400">
+                      <LibraryBooksOutlinedIcon />
+                    </div>
+                  )}
+                </div>
+                <div className="flex flex-col">
+                  <label className="text-sm font-bold text-gray-700 mb-1">Cover Image</label>
+                  <p className="text-xs text-gray-500 mb-3">Upload a high-quality JPG or PNG.</p>
+                  <label className="cursor-pointer bg-white border border-gray-200 text-gray-600 text-xs font-semibold px-4 py-2 rounded-lg hover:border-[#41431B] transition-colors inline-flex items-center gap-2 w-max">
+                    <CloudUploadOutlinedIcon fontSize="small" /> Choose File
+                    <input type="file" accept="image/*" className="hidden" onChange={handleImageChange} />
+                  </label>
+                </div>
+              </div>
+
+              <div className="flex gap-4">
+                <div className="flex flex-col gap-1.5 flex-1">
+                  <label className="text-sm font-semibold text-gray-700">Book Title *</label>
+                  <input type="text" required placeholder="e.g. The Great Gatsby" className="w-full h-11 px-4 rounded-xl border border-gray-200 outline-none focus:border-[#41431B] focus:ring-1 focus:ring-[#41431B] transition-all bg-gray-50 focus:bg-white text-sm" />
+                </div>
+                <div className="flex flex-col gap-1.5 flex-1">
+                  <label className="text-sm font-semibold text-gray-700">Author *</label>
+                  <input type="text" required placeholder="e.g. F. Scott Fitzgerald" className="w-full h-11 px-4 rounded-xl border border-gray-200 outline-none focus:border-[#41431B] focus:ring-1 focus:ring-[#41431B] transition-all bg-gray-50 focus:bg-white text-sm" />
+                </div>
+              </div>
+
+              <div className="flex gap-4">
+                <div className="flex flex-col gap-1.5 flex-1">
+                  <label className="text-sm font-semibold text-gray-700">Category *</label>
+                  <select required className="w-full h-11 px-4 rounded-xl border border-gray-200 outline-none focus:border-[#41431B] focus:ring-1 focus:ring-[#41431B] transition-all bg-gray-50 focus:bg-white text-sm text-gray-700">
+                    <option value="">Select Category</option>
+                    <option value="fiction">Fiction</option>
+                    <option value="science">Science</option>
+                    <option value="history">History</option>
+                    <option value="self-help">Self-Help</option>
+                  </select>
+                </div>
+                <div className="flex flex-col gap-1.5 flex-1">
+                  <label className="text-sm font-semibold text-gray-700">ISBN</label>
+                  <input type="text" placeholder="e.g. 978-3-16-148410-0" className="w-full h-11 px-4 rounded-xl border border-gray-200 outline-none focus:border-[#41431B] focus:ring-1 focus:ring-[#41431B] transition-all bg-gray-50 focus:bg-white text-sm" />
+                </div>
+              </div>
+
+              <div className="flex gap-3 mt-4 pt-4 border-t border-gray-100">
+                <button type="button" onClick={onClose} className="flex-1 py-3 rounded-xl border border-gray-200 text-gray-700 font-semibold text-sm hover:bg-gray-50 transition-colors">
+                  Cancel
+                </button>
+                <button type="submit" className="flex-1 py-3 rounded-xl bg-[#41431B] text-[#F8F3E1] font-semibold text-sm hover:bg-[#2b2d12] transition-colors shadow-md">
+                  Save Book
+                </button>
+              </div>
+
+            </form>
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
+  );
+}
+
+// ---------------------------------------------------------
+// REGISTER USER MODAL COMPONENT (Unchanged)
+// ---------------------------------------------------------
+function RegisterUserModal({ isOpen, onClose }) {
+  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onClose();
+  };
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -243,7 +371,6 @@ function RegisterUserModal({ isOpen, onClose }) {
             className="absolute inset-0 bg-black/40 backdrop-blur-sm"
           />
 
-          {/* Modal Container */}
           <motion.div 
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -251,41 +378,26 @@ function RegisterUserModal({ isOpen, onClose }) {
             transition={{ type: "spring", bounce: 0, duration: 0.4 }}
             className="relative bg-white w-full max-w-md rounded-3xl shadow-2xl p-8 z-10"
           >
-            {/* Header */}
             <div className="flex justify-between items-center mb-6">
               <div>
                 <h2 className="text-2xl font-bold text-[#41431B]">Register New User</h2>
                 <p className="text-sm text-gray-500 mt-1">Add a new member to the library system.</p>
               </div>
-              <button 
-                onClick={onClose}
-                className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 transition-colors"
-              >
+              <button onClick={onClose} className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 transition-colors">
                 <CloseIcon fontSize="small" />
               </button>
             </div>
 
-            {/* Form */}
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               
               <div className="flex flex-col gap-1.5">
                 <label className="text-sm font-semibold text-gray-700">Full Name</label>
-                <input 
-                  type="text" 
-                  required
-                  placeholder="John Doe" 
-                  className="w-full h-11 px-4 rounded-xl border border-gray-200 outline-none focus:border-[#41431B] focus:ring-1 focus:ring-[#41431B] transition-all bg-gray-50 focus:bg-white text-sm"
-                />
+                <input type="text" required placeholder="John Doe" className="w-full h-11 px-4 rounded-xl border border-gray-200 outline-none focus:border-[#41431B] focus:ring-1 focus:ring-[#41431B] transition-all bg-gray-50 focus:bg-white text-sm" />
               </div>
 
               <div className="flex flex-col gap-1.5">
                 <label className="text-sm font-semibold text-gray-700">Email Address</label>
-                <input 
-                  type="email" 
-                  required
-                  placeholder="john@example.com" 
-                  className="w-full h-11 px-4 rounded-xl border border-gray-200 outline-none focus:border-[#41431B] focus:ring-1 focus:ring-[#41431B] transition-all bg-gray-50 focus:bg-white text-sm"
-                />
+                <input type="email" required placeholder="john@example.com" className="w-full h-11 px-4 rounded-xl border border-gray-200 outline-none focus:border-[#41431B] focus:ring-1 focus:ring-[#41431B] transition-all bg-gray-50 focus:bg-white text-sm" />
               </div>
 
               <div className="flex flex-col gap-1.5">
@@ -299,27 +411,14 @@ function RegisterUserModal({ isOpen, onClose }) {
 
               <div className="flex flex-col gap-1.5">
                 <label className="text-sm font-semibold text-gray-700">Temporary Password</label>
-                <input 
-                  type="password" 
-                  required
-                  placeholder="••••••••" 
-                  className="w-full h-11 px-4 rounded-xl border border-gray-200 outline-none focus:border-[#41431B] focus:ring-1 focus:ring-[#41431B] transition-all bg-gray-50 focus:bg-white text-sm"
-                />
+                <input type="password" required placeholder="••••••••" className="w-full h-11 px-4 rounded-xl border border-gray-200 outline-none focus:border-[#41431B] focus:ring-1 focus:ring-[#41431B] transition-all bg-gray-50 focus:bg-white text-sm" />
               </div>
 
-              {/* Action Buttons */}
-              <div className="flex gap-3 mt-4">
-                <button 
-                  type="button" 
-                  onClick={onClose}
-                  className="flex-1 py-3 rounded-xl border border-gray-200 text-gray-700 font-semibold text-sm hover:bg-gray-50 transition-colors"
-                >
+              <div className="flex gap-3 mt-4 pt-4 border-t border-gray-100">
+                <button type="button" onClick={onClose} className="flex-1 py-3 rounded-xl border border-gray-200 text-gray-700 font-semibold text-sm hover:bg-gray-50 transition-colors">
                   Cancel
                 </button>
-                <button 
-                  type="submit" 
-                  className="flex-1 py-3 rounded-xl bg-[#41431B] text-[#F8F3E1] font-semibold text-sm hover:bg-[#2b2d12] transition-colors shadow-md"
-                >
+                <button type="submit" className="flex-1 py-3 rounded-xl bg-[#41431B] text-[#F8F3E1] font-semibold text-sm hover:bg-[#2b2d12] transition-colors shadow-md">
                   Create User
                 </button>
               </div>
