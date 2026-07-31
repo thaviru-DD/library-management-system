@@ -8,28 +8,26 @@ import Image from 'next/image';
 import { motion } from 'framer-motion'
 import BookCard from '@/components/user/BookCard';
 import Link from 'next/link';
+import Navbar from '@/components/shared/Navbar';
 
 function Page() {
   return (
     <div>
-      <Sidebar/>
+      {/* <Sidebar/> */}
+      {/* pl-10 
+      ml-64 */}
+      <Navbar/>
 
-      <main className="ml-64 flex-1 pl-10 overflow-x-hidden">
+      <main className="flex-1 overflow-x-hidden">
 
         {/* Hero — parchment box, sized to its OWN content only */}
-        <div className='bg-parchment p-10'>
+        <div className='bg-parchment p-5'>
 
-          <div className="flex justify-between items-center">
+          <div className="items-center">
             <h1 className="font-bold text-4xl">Discover</h1>
-            <div className='flex gap-6 items-center'>
-              <Link href="/profile">
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" >T</Avatar>
-              </Link>
-              <NotificationsActiveOutlinedIcon/>
-            </div>
           </div>
 
-          <SearchBar/>
+          {/* <SearchBar/> */}
 
           <div className='mt-20 flex justify-between items-center'>
             <h3 className='text-gray-700 text-xl'>Book Recommendation</h3>
@@ -57,7 +55,7 @@ function Page() {
         {/* Popular Books — its own section, plain white background, OUTSIDE the parchment box */}
         <div className='mt-10 px-3'>
           <h1 className='text-gray-700 text-2xl mb-5'>Popular books</h1>
-          <div className='flex justify-between items-center flex-wrap gap-6'>
+          <div className='flex justify-between items-center flex-wrap gap-2'>
             <BookCard book={{ title: 'Sapiens', author: 'Yuval Noah Harari', image: '/bookCovers/book1.jpg', price: '2500', description: "Lorem ipsum dolor sit amet consectetur adipisicing elit." }} />
             <BookCard book={{ title: 'Atomic Habits', author: 'George Orwell', image: '/bookCovers/book10.jpg', price: '3500', description: "Lorem ipsum dolor sit amet consectetur adipisicing elit." }} />
             <BookCard book={{ title: 'Dune', author: 'Frank Herbert', image: '/bookCovers/book3.jpg', price: '4800', description: "Lorem ipsum dolor sit amet consectetur adipisicing elit." }} />
