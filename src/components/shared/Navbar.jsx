@@ -5,7 +5,7 @@ import Avatar from '@mui/material/Avatar';
 
 function Navbar() {
   return (
-    <div className='flex justify-between items-center p-5'>
+    <div className='flex justify-between items-center px-20 py-5'>
       <div>
         <h1 className='font-bold text-2xl'>THE BOOK</h1>
       </div>

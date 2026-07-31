@@ -6,6 +6,7 @@ import Button from '@/components/shared/Button';
 import { getBooks } from '@/lib/bookStorage';
 import Image from 'next/image';
 import EditProfileModal from '@/components/user/EditProfileModal';
+import Navbar from '@/components/shared/Navbar';
 
 export default function ProfilePage() {
   const [user, setUser] = useState(null);
@@ -37,9 +38,9 @@ export default function ProfilePage() {
 
   return (
     <div>
-      <Sidebar />
+      <Navbar/>
 
-      <main className="ml-64 flex-1 pl-10 pr-10 py-10 overflow-x-hidden">
+      <main className="mx-20 flex-1 overflow-x-hidden mt-10">
 
         
 

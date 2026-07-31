@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 // Components
 import Sidebar from '@/components/shared/Sidebar';
+import Button from '@/components/shared/Button';
 
 // Icons
 import SearchIcon from '@mui/icons-material/Search';
@@ -16,7 +17,6 @@ import AddIcon from '@mui/icons-material/Add';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import CloseIcon from '@mui/icons-material/Close';
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
-import Button from '@/components/shared/Button';
 
 // Mock Data
 const initialBooks = [
@@ -28,11 +28,17 @@ const initialBooks = [
 
 export default function BooksManagementPage() {
   // STATE
-  const [books, setBooks] = useState(initialBooks); // Moved to state so it can update
+  const [books, setBooks] = useState(initialBooks);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedBooks, setSelectedBooks] = useState([]);
+  
+  // Add Modal State
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState(null);
+
+  // Edit Modal State
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editFormData, setEditFormData] = useState([]); // Array to handle batch edits
   
   // Handle individual row selection
   const toggleSelection = (id) => {
@@ -50,7 +56,7 @@ export default function BooksManagementPage() {
     }
   };
 
-  // Handle Image Upload Preview
+  // --- ADD BOOK LOGIC ---
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -58,27 +64,59 @@ export default function BooksManagementPage() {
     }
   };
 
-  // Handle Form Submission
   const handleAddBook = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     
-    // Create new book object from form data
     const newBook = {
-      id: Date.now().toString(), // Generate a fake unique ID
+      id: Date.now().toString(),
       title: formData.get('title'),
       author: formData.get('author'),
       description: formData.get('description'),
-      // Fallback to a default if no image is uploaded
       cover: previewImage || '/bookCovers/book1.jpg', 
-      category: 'Uncategorized', // Defaulting for now
+      category: 'Uncategorized',
       status: 'Available',
-      isbn: `100-${Math.floor(Math.random() * 9)}-${Math.floor(Math.random() * 99)}` // Fake ISBN
+      isbn: `100-${Math.floor(Math.random() * 9)}-${Math.floor(Math.random() * 99)}`
     };
 
-    setBooks([newBook, ...books]); // Add new book to top of list
-    setIsAddModalOpen(false); // Close modal
-    setPreviewImage(null); // Reset preview
+    setBooks([newBook, ...books]);
+    setIsAddModalOpen(false);
+    setPreviewImage(null);
+  };
+
+  // --- EDIT BOOKS LOGIC ---
+  const handleOpenEditModal = () => {
+    const booksToEdit = books.filter(book => selectedBooks.includes(book.id));
+    // Create a deep copy of selected books to use as isolated form state
+    setEditFormData(JSON.parse(JSON.stringify(booksToEdit)));
+    setIsEditModalOpen(true);
+  };
+
+  const handleEditChange = (id, field, value) => {
+    setEditFormData(prev => 
+      prev.map(book => book.id === id ? { ...book, [field]: value } : book)
+    );
+  };
+
+  const handleEditImageChange = (id, e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      handleEditChange(id, 'cover', url);
+    }
+  };
+
+  const handleSaveEdits = (e) => {
+    e.preventDefault();
+    // Map over existing books, apply updates if the book was edited
+    setBooks(prevBooks => 
+      prevBooks.map(book => {
+        const editedBook = editFormData.find(b => b.id === book.id);
+        return editedBook ? { ...book, ...editedBook } : book;
+      })
+    );
+    setIsEditModalOpen(false);
+    setSelectedBooks([]); // Clear selection after successful edit
   };
 
   // Helper for dynamic status colors
@@ -137,14 +175,17 @@ export default function BooksManagementPage() {
           
           {/* Bulk Actions */}
           <div className="flex items-center gap-3 mb-6">
-            {/* <button disabled={selectedBooks.length === 0} className="px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm font-medium text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 transition-colors">
-              Edit Selected ({selectedBooks.length})
-            </button>
-            <button disabled={selectedBooks.length === 0} className="px-4 py-2 bg-red-50 border border-red-100 rounded-lg text-sm font-medium text-red-600 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-red-100 transition-colors">
-              Delete Selected
-            </button> */}
-            <Button name={`Edit Selected (${selectedBooks.length})`} disabled={selectedBooks.length === 0} style='px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm font-medium text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 transition-colors'/>
-            <Button name='Delete Selected' disabled={selectedBooks.length === 0} style='px-4 py-2 bg-red-50 border border-red-100 rounded-lg text-sm font-medium text-red-600 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-red-100 transition-colors'/>
+            <Button 
+              name={`Edit Selected (${selectedBooks.length})`} 
+              disabled={selectedBooks.length === 0} 
+              onClick={handleOpenEditModal}
+              style='px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm font-medium text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 transition-colors'
+            />
+            <Button 
+              name='Delete Selected' 
+              disabled={selectedBooks.length === 0} 
+              style='px-4 py-2 bg-red-50 border border-red-100 rounded-lg text-sm font-medium text-red-600 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-red-100 transition-colors'
+            />
 
             <select disabled={selectedBooks.length === 0} className="px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm font-medium text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:border-[#41431B]">
               <option value="">Assign to Category</option>
@@ -228,7 +269,15 @@ export default function BooksManagementPage() {
                       <button className="p-1.5 hover:bg-gray-200 rounded-full transition-colors text-gray-500 hover:text-[#41431B]" title="View Details">
                         <RemoveRedEyeOutlinedIcon fontSize="small" />
                       </button>
-                      <button className="p-1.5 hover:bg-gray-200 rounded-full transition-colors text-gray-500 hover:text-blue-600" title="Edit">
+                      <button 
+                        onClick={() => {
+                          setSelectedBooks([book.id]);
+                          setEditFormData([JSON.parse(JSON.stringify(book))]);
+                          setIsEditModalOpen(true);
+                        }}
+                        className="p-1.5 hover:bg-gray-200 rounded-full transition-colors text-gray-500 hover:text-blue-600" 
+                        title="Edit"
+                      >
                         <ModeEditOutlineOutlinedIcon fontSize="small" />
                       </button>
                       <button className="p-1.5 hover:bg-red-100 rounded-full transition-colors text-gray-500 hover:text-red-600" title="Delete">
@@ -243,15 +292,120 @@ export default function BooksManagementPage() {
         </div>
       </main>
 
+      {/* EDIT SELECTED MODAL */}
+      <AnimatePresence>
+        {isEditModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              onClick={() => setIsEditModalOpen(false)}
+              className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+            />
+
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative bg-white w-full max-w-2xl rounded-3xl shadow-2xl p-8 z-10 max-h-[85vh] flex flex-col"
+            >
+              <div className="flex justify-between items-center mb-6">
+                <div>
+                  <h2 className="text-2xl font-bold text-[#41431B]">Edit Books</h2>
+                  <p className="text-sm text-gray-500 mt-1">Editing {editFormData.length} selected book(s)</p>
+                </div>
+                <button onClick={() => setIsEditModalOpen(false)} className="p-2 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors">
+                  <CloseIcon fontSize="small" className="text-gray-600" />
+                </button>
+              </div>
+
+              <form onSubmit={handleSaveEdits} className="flex-1 overflow-y-auto pr-2">
+                {editFormData.map((book, index) => (
+                  <div key={book.id} className={`flex flex-col gap-4 pb-6 mb-6 ${index !== editFormData.length - 1 ? 'border-b border-gray-100' : ''}`}>
+                    
+                    {/* Cover Image Upload (Edit) */}
+                    <div className="flex gap-6 items-center bg-gray-50 p-4 rounded-2xl border border-dashed border-gray-300">
+                      <div className="relative w-16 h-24 bg-gray-200 rounded-lg overflow-hidden shadow-sm border border-gray-100 flex-shrink-0">
+                        <Image src={book.cover} alt="Cover Preview" fill className="object-cover" />
+                      </div>
+                      <div className="flex flex-col">
+                        <label className="text-sm font-bold text-gray-700 mb-1">Update Cover Image</label>
+                        <p className="text-xs text-gray-500 mb-2">Leave blank to keep existing cover.</p>
+                        <label className="cursor-pointer bg-white border border-gray-200 text-gray-600 text-xs font-semibold px-4 py-2 rounded-lg hover:border-[#41431B] transition-colors inline-flex items-center gap-2 w-max">
+                          <CloudUploadOutlinedIcon fontSize="small" /> Choose File
+                          <input type="file" accept="image/*" className="hidden" onChange={(e) => handleEditImageChange(book.id, e)} />
+                        </label>
+                      </div>
+                    </div>
+
+                    {/* Text Inputs */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-sm font-bold text-gray-700">Book Title</label>
+                        <input 
+                          type="text" 
+                          required 
+                          value={book.title} 
+                          onChange={(e) => handleEditChange(book.id, 'title', e.target.value)}
+                          className="h-11 px-4 border border-gray-200 rounded-xl focus:outline-none focus:border-[#41431B] bg-gray-50 focus:bg-white text-sm" 
+                        />
+                      </div>
+                      
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-sm font-bold text-gray-700">Author (Read Only)</label>
+                        <input 
+                          type="text" 
+                          value={book.author} 
+                          disabled
+                          className="h-11 px-4 border border-gray-200 rounded-xl bg-gray-100 text-gray-500 text-sm cursor-not-allowed" 
+                        />
+                      </div>
+
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-sm font-bold text-gray-700">Category</label>
+                        <input 
+                          type="text" 
+                          required 
+                          value={book.category} 
+                          onChange={(e) => handleEditChange(book.id, 'category', e.target.value)}
+                          className="h-11 px-4 border border-gray-200 rounded-xl focus:outline-none focus:border-[#41431B] bg-gray-50 focus:bg-white text-sm" 
+                        />
+                      </div>
+
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-sm font-bold text-gray-700">ISBN</label>
+                        <input 
+                          type="text" 
+                          required 
+                          value={book.isbn} 
+                          onChange={(e) => handleEditChange(book.id, 'isbn', e.target.value)}
+                          className="h-11 px-4 border border-gray-200 rounded-xl focus:outline-none focus:border-[#41431B] bg-gray-50 focus:bg-white text-sm font-mono" 
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                
+                <div className="flex justify-end gap-3 pt-4 border-t border-gray-100 mt-2">
+                  <button type="button" onClick={() => setIsEditModalOpen(false)} className="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-600 font-semibold text-sm hover:bg-gray-50">
+                    Cancel
+                  </button>
+                  <button type="submit" className="px-5 py-2.5 rounded-xl bg-[#41431B] text-[#F8F3E1] font-semibold text-sm shadow-md hover:bg-[#2b2d12]">
+                    Save Changes
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
       {/* ADD BOOK MODAL */}
       <AnimatePresence>
         {isAddModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
             {/* Backdrop */}
             <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
               onClick={() => setIsAddModalOpen(false)}
               className="absolute inset-0 bg-black/40 backdrop-blur-sm"
             />
