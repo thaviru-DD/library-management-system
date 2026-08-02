@@ -14,6 +14,7 @@ import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import AddIcon from '@mui/icons-material/Add';
 import ClassOutlinedIcon from '@mui/icons-material/ClassOutlined';
 import CloseIcon from '@mui/icons-material/Close';
+import Modal from '@/components/shared/Modal';
 
 
 const initialCategories = [
@@ -24,12 +25,13 @@ const initialCategories = [
 ];
 
 export default function CategoriesManagementPage() {
+
   const [categories, setCategories] = useState(initialCategories);
   const [searchQuery, setSearchQuery] = useState('');
   
   
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalMode, setModalMode] = useState('add'); // 'add' or 'edit'
+  const [modalMode, setModalMode] = useState('add'); // add or edit
   const [currentCategory, setCurrentCategory] = useState({ name: '', description: '' });
 
   
@@ -91,26 +93,14 @@ export default function CategoriesManagementPage() {
             <h1 className="text-3xl font-extrabold text-[#41431B] tracking-tight">Category Management</h1>
             <p className="text-sm text-gray-500 mt-1">Organize your catalog by adding, editing, or removing book categories.</p>
           </div>
-          {/* Using your custom Button component */}
-          <Button 
-            name="Add Category" 
-            icon={<AddIcon fontSize="small" />}
-            onClick={openAddModal}
-            style="flex items-center gap-2 bg-[#41431B] text-[#F8F3E1] px-5 py-2.5 rounded-xl font-semibold shadow-md hover:bg-[#2b2d12] transition-colors cursor-pointer"
-          />
+          <Button name="Add Category" icon={<AddIcon fontSize="small" />} onClick={openAddModal} style="flex items-center gap-2 bg-[#41431B] text-[#F8F3E1] px-5 py-2.5 rounded-xl font-semibold shadow-md hover:bg-[#2b2d12] transition-colors cursor-pointer"/>
         </div>
 
         {/* SEARCH BAR */}
         <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center">
           <div className="relative w-96">
             <SearchIcon className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-400" fontSize="small" />
-            <input
-              type="text"
-              placeholder="Search categories..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full h-11 pl-10 pr-4 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#41431B] focus:bg-white transition-colors"
-            />
+            <input type="text" placeholder="Search categories..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="w-full h-11 pl-10 pr-4 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#41431B] focus:bg-white transition-colors"/>
           </div>
         </div>
 
@@ -172,14 +162,14 @@ export default function CategoriesManagementPage() {
       </main>
 
       {/* ADD / EDIT MODAL */}
-      <AnimatePresence>
+      {/* <AnimatePresence>
         {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4"> */}
             {/* Backdrop */}
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsModalOpen(false)} className="absolute inset-0 bg-black/40 backdrop-blur-sm"/>
+            {/* <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsModalOpen(false)} className="absolute inset-0 bg-black/40 backdrop-blur-sm"/> */}
 
             {/* Modal Box */}
-            <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative bg-white w-full max-w-md rounded-3xl shadow-2xl p-8 z-10">
+            {/* <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative bg-white w-full max-w-md rounded-3xl shadow-2xl p-8 z-10">
               <div className="flex justify-between items-center mb-6">
                 <div>
                   <h2 className="text-2xl font-bold text-[#41431B]">
@@ -203,10 +193,10 @@ export default function CategoriesManagementPage() {
                 <div className="flex flex-col gap-1.5">
                   <label className="text-sm font-semibold text-gray-700">Description</label>
                   <textarea rows="3" value={currentCategory.description} onChange={(e) => setCurrentCategory({...currentCategory, description: e.target.value})} placeholder="Briefly describe the types of books in this category..." className="w-full p-4 rounded-xl border border-gray-200 outline-none focus:border-[#41431B] focus:ring-1 focus:ring-[#41431B] transition-all bg-gray-50 focus:bg-white text-sm resize-none"/>
-                </div>
+                </div> */}
 
                 {/* Action Buttons */}
-                <div className="flex gap-3 mt-4">
+                {/* <div className="flex gap-3 mt-4">
                   <button type="button" onClick={() => setIsModalOpen(false)} className="flex-1 py-3 rounded-xl border border-gray-200 text-gray-700 font-semibold text-sm hover:bg-gray-50 transition-colors">
                     Cancel
                   </button>
@@ -216,9 +206,49 @@ export default function CategoriesManagementPage() {
                 </div>
               </form>
             </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+          </div> */}
+        {/* )}
+      </AnimatePresence> */}
+
+      {/* MODAL FOR ADDING A NEW BOOK */}
+            <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)}>
+              <div className='w-100 h-100'>
+                <div className="flex justify-between items-center mb-6">
+                  <div>
+                    <h2 className="text-2xl font-bold text-[#41431B]">
+                      {modalMode === 'add' ? 'Add Category' : 'Edit Category'}
+                    </h2>
+                    <p className="text-sm text-gray-500 mt-1">
+                      {modalMode === 'add' ? 'Create a new section for your library.' : 'Update category details.'}
+                    </p>
+                  </div>
+                </div>
+            
+                <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-sm font-semibold text-gray-700">Category Name</label>
+                  <input type="text" required value={currentCategory.name} onChange={(e) => setCurrentCategory({...currentCategory, name: e.target.value})} placeholder="e.g. Science Fiction" className="w-full h-11 px-4 rounded-xl border border-gray-200 outline-none focus:border-[#41431B] focus:ring-1 focus:ring-[#41431B] transition-all bg-gray-50 focus:bg-white text-sm"/>
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-sm font-semibold text-gray-700">Description</label>
+                  <textarea rows="3" value={currentCategory.description} onChange={(e) => setCurrentCategory({...currentCategory, description: e.target.value})} placeholder="Briefly describe the types of books in this category..." className="w-full p-4 rounded-xl border border-gray-200 outline-none focus:border-[#41431B] focus:ring-1 focus:ring-[#41431B] transition-all bg-gray-50 focus:bg-white text-sm resize-none"/>
+                </div> 
+
+                {/* Action Buttons */}
+                 <div className="flex gap-3 mt-4">
+                  <button type="button" onClick={() => setIsModalOpen(false)} className="flex-1 py-3 rounded-xl border border-gray-200 text-gray-700 font-semibold text-sm hover:bg-gray-50 transition-colors">
+                    Cancel
+                  </button>
+                  <button type="submit" className="flex-1 py-3 rounded-xl bg-[#41431B] text-[#F8F3E1] font-semibold text-sm hover:bg-[#2b2d12] transition-colors shadow-md">
+                    {modalMode === 'add' ? 'Save Category' : 'Update Category'}
+                  </button>
+                </div>
+              </form>
+              </div>
+            </Modal>
+
+
     </div>
   )
 }

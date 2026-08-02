@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 
 // Components
 import Sidebar from '@/components/shared/Sidebar';
+import Modal from '@/components/shared/Modal';
 
 // Icons
 import SearchIcon from '@mui/icons-material/Search';
@@ -16,6 +17,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
 import Button from '@/components/shared/Button';
 import CheckBox from '@/components/shared/CheckBox';
+import { filter } from 'framer-motion/client';
 
 // Mock Data
 const initialUsers = [
@@ -30,6 +32,7 @@ export default function UsersManagementPage() {
   const [users, setUsers] = useState(initialUsers);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedUsers, setSelectedUsers] = useState([]);
+  const [Open, setOpen] = useState(false);
 
   // Handle individual row selection
   const toggleSelection = (id) => {
@@ -85,6 +88,10 @@ export default function UsersManagementPage() {
     return name.split(' ').map(n => n[0]).join('').toUpperCase();
   };
 
+  const filteredMembers = initialUsers.filter( c=>
+    c.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="min-h-screen bg-[#faf9f6] text-gray-800 font-sans flex">
       <Sidebar />
@@ -100,7 +107,7 @@ export default function UsersManagementPage() {
           {/* <button className="flex items-center gap-2 bg-[#41431B] text-[#F8F3E1] px-5 py-2.5 rounded-xl font-semibold shadow-md hover:bg-[#2b2d12] transition-colors">
             <PersonAddOutlinedIcon fontSize="small" /> Register User
           </button> */}
-          <Button style='flex items-center gap-2 bg-[#41431B] text-[#F8F3E1] px-5 py-2.5 rounded-xl font-semibold shadow-md hover:bg-[#2b2d12] transition-colors' name='Register User' icon={<PersonAddOutlinedIcon fontSize="small" />}/>
+          <Button style='flex items-center gap-2 bg-[#41431B] text-[#F8F3E1] px-5 py-2.5 rounded-xl font-semibold shadow-md hover:bg-[#2b2d12] transition-colors' name='Register User' icon={<PersonAddOutlinedIcon fontSize="small" />} onClick={() => setOpen(true)}/>
         </div>
 
         {/* FILTERS & SEARCH */}
@@ -145,17 +152,12 @@ export default function UsersManagementPage() {
           </div>
 
           {/* Table */}
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto"> 
             <div className="min-w-[900px]">
               {/* Table Header */}
               <div className="flex items-center bg-[#F8F3E1]/60 px-4 py-3 rounded-xl mb-2">
                 <div className="w-12 flex justify-center">
-                  <input 
-                    type="checkbox" 
-                    checked={selectedUsers.length === users.length && users.length > 0}
-                    onChange={toggleSelectAll}
-                    className="w-4 h-4 accent-[#41431B] cursor-pointer"
-                  />
+                  <input type="checkbox" checked={selectedUsers.length === users.length && users.length > 0} onChange={toggleSelectAll} className="w-4 h-4 accent-[#41431B] cursor-pointer"/>
                 </div>
                 <h3 className="flex-1 text-left pl-4 font-bold text-xs uppercase tracking-wider text-gray-500">Member Details</h3>
                 <h3 className="w-32 text-left font-bold text-xs uppercase tracking-wider text-gray-500">Role</h3>
@@ -165,8 +167,11 @@ export default function UsersManagementPage() {
               </div>
 
               {/* Table Body */}
-              <div className="flex flex-col">
-                {users.map((user) => (
+              <div className="flex flex-col"> {filteredMembers.length === 0 ? (
+                <div className="flex justify-center items-center h-40 text-gray-400 text-sm">No members found.</div>
+                ) : (
+                filteredMembers.map((user) => (
+                  
                   <motion.div 
                     key={user.id} 
                     initial={{ opacity: 0, y: 10 }}
@@ -247,11 +252,51 @@ export default function UsersManagementPage() {
                       </button>
                     </div>
                   </motion.div>
-                ))}
+                ))
+              )}
               </div>
             </div>
+          
           </div>
+
+
         </div>
+
+
+        {/* Modal for Registering a New User */}
+        <Modal open={Open} onClose={() => setOpen(false)}>
+            <div className='w-100 h-125'>
+              <h2 className='text-3xl font-bold'>Register user</h2>
+              <p>Add new member to libruary system</p>
+
+              <div className='mt-6 flex flex-col gap-4'>
+                <div>
+                  <label htmlFor="name">Full name</label>
+                  <input type="text" id="name" name="name" className='w-full mt-2 p-2 border rounded-lg border-gray-200' placeholder='Enter full name' />
+                </div>
+                <div>
+                  <label htmlFor="name">Email</label>
+                  <input type="text" id="name" name="name" className='w-full mt-2 p-2 border rounded-lg border-gray-200' placeholder='jhondoil@gmail.com' />
+                </div>
+                <div>
+                  <label htmlFor="name">Role</label>
+                  <input type="text" id="name" name="name" className='w-full mt-2 p-2 border rounded-lg border-gray-200' placeholder='Admin, user' />
+                </div>
+                <div>
+                  <label htmlFor="name">Tempory password</label>
+                  <input type="text" id="name" name="name" className='w-full mt-2 p-2 border rounded-lg border-gray-200' placeholder='***************' />
+                </div>
+                <div className='flex justify-between items-center mt-4'>
+                <button type="button" onClick={() => setOpen(false)} className="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-600 font-semibold text-sm hover:bg-gray-50">
+                    Cancel
+                  </button>
+                  <button type="submit" onClick={() => setOpen(false)} className="px-5 py-2.5 rounded-xl bg-[#41431B] text-[#F8F3E1] font-semibold text-sm shadow-md hover:bg-[#2b2d12]">
+                    Save Changes
+                  </button>
+                </div>
+              </div>
+            </div>
+        </Modal>
       </main>
     </div>
   )

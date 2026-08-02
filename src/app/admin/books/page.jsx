@@ -17,6 +17,7 @@ import AddIcon from '@mui/icons-material/Add';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import CloseIcon from '@mui/icons-material/Close';
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
+import Modal from '@/components/shared/Modal';
 
 // Mock Data
 const initialBooks = [
@@ -399,38 +400,13 @@ export default function BooksManagementPage() {
         )}
       </AnimatePresence>
 
-      {/* ADD BOOK MODAL */}
-      <AnimatePresence>
-        {isAddModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            {/* Backdrop */}
-            <motion.div 
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-              onClick={() => setIsAddModalOpen(false)}
-              className="absolute inset-0 bg-black/40 backdrop-blur-sm"
-            />
-
-            {/* Modal Box */}
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative bg-white w-full max-w-lg rounded-3xl shadow-2xl p-8 z-10"
-            >
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold text-[#41431B]">Add New Book</h2>
-                <button 
-                  onClick={() => setIsAddModalOpen(false)}
-                  className="p-2 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors"
-                >
-                  <CloseIcon fontSize="small" className="text-gray-600" />
-                </button>
-              </div>
-
-              <form onSubmit={handleAddBook} className="flex flex-col gap-4">
-                
-                {/* Cover Image Upload */}
-                <div className="flex gap-6 items-center bg-gray-50 p-4 rounded-2xl border border-dashed border-gray-300">
+                {/* MODAL FOR ADDING A NEW BOOK */}
+            <Modal open={isAddModalOpen} onClose={() => setIsAddBookModalOpen(false)}>
+              <div className='w-100 h-125'>
+                <h2 className='text-3xl font-bold text-[#41431B]'>Add new book</h2>
+                <p>Add new book to library system</p>
+      
+                <div className="flex gap-6 items-center bg-gray-50 p-4 rounded-2xl border border-dashed border-gray-300 mt-4">
                   <div className="relative w-20 h-28 bg-gray-200 rounded-lg overflow-hidden shadow-sm border border-gray-100 flex-shrink-0">
                     {previewImage ? (
                       <Image src={previewImage} alt="Preview" fill className="object-cover" />
@@ -449,36 +425,39 @@ export default function BooksManagementPage() {
                     </label>
                   </div>
                 </div>
-
-                <div className="flex gap-4">
-                  <div className="flex flex-col gap-1.5 flex-1">
-                    <label className="text-sm font-bold text-gray-700">Book Title *</label>
-                    <input type="text" name="title" required placeholder="e.g. The Great Gatsby" className="h-11 px-4 border border-gray-200 rounded-xl focus:outline-none focus:border-[#41431B] bg-gray-50 focus:bg-white text-sm" />
+      
+                <form onSubmit={(e) => {e.preventDefault();handleSaveBook(); setIsAddBookModalOpen(false);}}className='mt-6 flex flex-col gap-4'>
+                  <div className='grid grid-cols-2 gap-6'>
+                    <div>
+                      <label htmlFor="bookName">Book name</label>
+                      <input type="text" id="bookName" name="bookName" value="name" onChange={(e) => setBookForm({ ...bookForm, name: e.target.value })} className='w-full mt-2 p-2 border rounded-lg border-gray-200'placeholder='Enter book name'/>
+                    </div>
+                    <div>
+                      <label htmlFor="author">Author</label>
+                      <input type="text" id="author" name="author" value="author" onChange={(e) => setBookForm({ ...bookForm, author: e.target.value })} className='w-full mt-2 p-2 border rounded-lg border-gray-200'placeholder='Enter book author'/>
+                    </div>
                   </div>
-                  <div className="flex flex-col gap-1.5 flex-1">
-                    <label className="text-sm font-bold text-gray-700">Author *</label>
-                    <input type="text" name="author" required placeholder="e.g. F. Scott Fitzgerald" className="h-11 px-4 border border-gray-200 rounded-xl focus:outline-none focus:border-[#41431B] bg-gray-50 focus:bg-white text-sm" />
+                  <div className='grid grid-cols-2 gap-6'>
+                    <div>
+                      <label htmlFor="category">Category</label>
+                      <input type="text" id="category" name="category" value="" onChange={(e) => setBookForm({ ...bookForm, category: e.target.value })} className='w-full mt-2 p-2 border rounded-lg border-gray-200'placeholder='History'/>
+                    </div>
+                    <div>
+                      <label htmlFor="isbn">ISBN</label>
+                      <input type="text" id="isbn" name="isbn" value="" onChange={(e) => setBookForm({ ...bookForm, isbn: e.target.value })} className='w-full mt-2 p-2 border rounded-lg border-gray-200' placeholder='236-751'/>
+                    </div>
                   </div>
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-bold text-gray-700">Description</label>
-                  <textarea name="description" rows="3" placeholder="Brief summary of the book..." className="p-4 border border-gray-200 rounded-xl focus:outline-none focus:border-[#41431B] bg-gray-50 focus:bg-white text-sm resize-none" />
-                </div>
-
-                <div className="flex justify-end gap-3 mt-4 pt-4 border-t border-gray-100">
-                  <button type="button" onClick={() => setIsAddModalOpen(false)} className="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-600 font-semibold text-sm hover:bg-gray-50">
-                    Cancel
-                  </button>
-                  <button type="submit" className="px-5 py-2.5 rounded-xl bg-[#41431B] text-[#F8F3E1] font-semibold text-sm shadow-md hover:bg-[#2b2d12]">
-                    Save Book
-                  </button>
-                </div>
-              </form>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+                  <div className='flex justify-between items-center mt-4'>
+                    <button type="button" onClick={() => setIsAddBookModalOpen(false)} className="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-600 font-semibold text-sm hover:bg-gray-50">
+                      Cancel
+                    </button>
+                    <button type="submit" className="px-5 py-2.5 rounded-xl bg-[#41431B] text-[#F8F3E1] font-semibold text-sm shadow-md hover:bg-[#2b2d12]">
+                      Save Changes
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </Modal>
     </div>
   )
 }

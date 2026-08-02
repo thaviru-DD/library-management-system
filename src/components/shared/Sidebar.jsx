@@ -15,14 +15,15 @@ import HelpIcon from '@mui/icons-material/Help';
 import LogoutIcon from '@mui/icons-material/Logout';
 import GroupIcon from '@mui/icons-material/Group';
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
 
 // Sidebar navigation items
 const navItems = [
   { icon: <HomeFilledIcon/>, label: 'Dashboard', link: '/admin' },
   { icon: <DragIndicatorIcon/>, label: 'Category', link: '/admin/categories' },
   { icon: <LibraryBooksIcon/>, label: 'Books', link: '/admin/books' },
-  { icon: <GroupIcon/>, label: 'Users', link: '/admin/users' }, // Fixed spelling from '/admin/user' to match your list
-  { icon: <FavoriteIcon/>, label: 'Favourite', link: '/admin/favourite' }, // Assuming a path
+  { icon: <GroupIcon/>, label: 'Users', link: '/admin/users' }, 
+  { icon: <FavoriteIcon/>, label: 'Favourite', link: '/admin/favourite' }, 
 ]
 
 const bottomNavItems = [
@@ -32,11 +33,17 @@ const bottomNavItems = [
 ];
 
 function Sidebar() {
-  const pathname = usePathname(); // <-- 2. Initialize the hook
+  const pathname = usePathname(); 
 
   return (
     <div className='fixed top-0 left-0 w-64 h-screen bg-white p-5 z-20 overflow-y-auto'>
-      <h1 className='font-bold text-2xl'>THE BOOK</h1>
+      
+      <div className='flex items-center gap-4'>
+        <MenuBookIcon fontSize='large'/>
+        <h1 className='font-bold text-2xl'>THE BOOK</h1>
+      </div>
+
+
       <h3 className='text-gray-400 mt-5'>MENU</h3>
 
       <div className='mt-8 flex flex-col gap-5'>
@@ -44,21 +51,15 @@ function Sidebar() {
         {navItems.map((item) => {
           // 3. Check if the current route matches the item's link
           const isActive = pathname === item.link;
-
           return (
             <Link href={item.link} key={item.label} className='group cursor-pointer flex items-center'>
-              
-              {/* Dynamic Icon Container Styling */}
               <div className={`inline px-3 pt-2 pb-3 rounded-lg transition-all duration-300 group-hover:shadow-xl group-hover:bg-orange-500 group-hover:text-white
-                ${isActive ? 'bg-orange-500 text-white shadow-xl' : 'bg-gray-200 text-gray-500'}
-              `}>
+                ${isActive ? 'bg-orange-500 text-white shadow-xl' : 'bg-gray-200 text-gray-500'}`}>
                 {item.icon}
               </div>
 
               {/* Dynamic Text Styling */}
-              <span className={`ml-2 transition-all duration-300 group-hover:text-black font-medium
-                ${isActive ? 'text-black' : 'text-gray-600'}
-              `}>
+              <span className={`ml-2 transition-all duration-300 group-hover:text-black font-medium ${isActive ? 'text-black' : 'text-gray-600'}`}>
                 {item.label}
               </span>
             </Link>
