@@ -144,7 +144,7 @@ export default function CategoriesManagementPage() {
                       </div>
                       
                       {/* Actions */}
-                      <div className="w-28 flex justify-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="w-28 flex justify-center gap-1">
                         <button onClick={() => openEditModal(category)} className="p-1.5 hover:bg-gray-200 rounded-full transition-colors text-gray-500 hover:text-blue-600" title="Edit">
                           <ModeEditOutlineOutlinedIcon fontSize="small" />
                         </button>
@@ -161,56 +161,8 @@ export default function CategoriesManagementPage() {
         </div>
       </main>
 
-      {/* ADD / EDIT MODAL */}
-      {/* <AnimatePresence>
-        {isModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4"> */}
-            {/* Backdrop */}
-            {/* <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsModalOpen(false)} className="absolute inset-0 bg-black/40 backdrop-blur-sm"/> */}
 
-            {/* Modal Box */}
-            {/* <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="relative bg-white w-full max-w-md rounded-3xl shadow-2xl p-8 z-10">
-              <div className="flex justify-between items-center mb-6">
-                <div>
-                  <h2 className="text-2xl font-bold text-[#41431B]">
-                    {modalMode === 'add' ? 'Add Category' : 'Edit Category'}
-                  </h2>
-                  <p className="text-sm text-gray-500 mt-1">
-                    {modalMode === 'add' ? 'Create a new section for your library.' : 'Update category details.'}
-                  </p>
-                </div>
-                <button onClick={() => setIsModalOpen(false)} className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 transition-colors">
-                  <CloseIcon fontSize="small" />
-                </button>
-              </div>
-
-              <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-semibold text-gray-700">Category Name</label>
-                  <input type="text" required value={currentCategory.name} onChange={(e) => setCurrentCategory({...currentCategory, name: e.target.value})} placeholder="e.g. Science Fiction" className="w-full h-11 px-4 rounded-xl border border-gray-200 outline-none focus:border-[#41431B] focus:ring-1 focus:ring-[#41431B] transition-all bg-gray-50 focus:bg-white text-sm"/>
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-sm font-semibold text-gray-700">Description</label>
-                  <textarea rows="3" value={currentCategory.description} onChange={(e) => setCurrentCategory({...currentCategory, description: e.target.value})} placeholder="Briefly describe the types of books in this category..." className="w-full p-4 rounded-xl border border-gray-200 outline-none focus:border-[#41431B] focus:ring-1 focus:ring-[#41431B] transition-all bg-gray-50 focus:bg-white text-sm resize-none"/>
-                </div> */}
-
-                {/* Action Buttons */}
-                {/* <div className="flex gap-3 mt-4">
-                  <button type="button" onClick={() => setIsModalOpen(false)} className="flex-1 py-3 rounded-xl border border-gray-200 text-gray-700 font-semibold text-sm hover:bg-gray-50 transition-colors">
-                    Cancel
-                  </button>
-                  <button type="submit" className="flex-1 py-3 rounded-xl bg-[#41431B] text-[#F8F3E1] font-semibold text-sm hover:bg-[#2b2d12] transition-colors shadow-md">
-                    {modalMode === 'add' ? 'Save Category' : 'Update Category'}
-                  </button>
-                </div>
-              </form>
-            </motion.div>
-          </div> */}
-        {/* )}
-      </AnimatePresence> */}
-
-      {/* MODAL FOR ADDING A NEW BOOK */}
+      {/* MODAL FOR ADDING A NEW CATEGORY AND EDIT */}
             <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)}>
               <div className='w-100 h-100'>
                 <div className="flex justify-between items-center mb-6">

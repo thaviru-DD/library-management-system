@@ -57,7 +57,7 @@ export default function BooksManagementPage() {
     }
   };
 
-  // --- ADD BOOK LOGIC ---
+  // add book
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -85,7 +85,7 @@ export default function BooksManagementPage() {
     setPreviewImage(null);
   };
 
-  // --- EDIT BOOKS LOGIC ---
+  // edit book
   const handleOpenEditModal = () => {
     const booksToEdit = books.filter(book => selectedBooks.includes(book.id));
     // Create a deep copy of selected books to use as isolated form state
@@ -176,17 +176,8 @@ export default function BooksManagementPage() {
           
           {/* Bulk Actions */}
           <div className="flex items-center gap-3 mb-6">
-            <Button 
-              name={`Edit Selected (${selectedBooks.length})`} 
-              disabled={selectedBooks.length === 0} 
-              onClick={handleOpenEditModal}
-              style='px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm font-medium text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 transition-colors'
-            />
-            <Button 
-              name='Delete Selected' 
-              disabled={selectedBooks.length === 0} 
-              style='px-4 py-2 bg-red-50 border border-red-100 rounded-lg text-sm font-medium text-red-600 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-red-100 transition-colors'
-            />
+            <Button name={`Edit Selected (${selectedBooks.length})`} disabled={selectedBooks.length === 0} onClick={handleOpenEditModal} style='px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm font-medium text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 transition-colors'/>
+            <Button name='Delete Selected' disabled={selectedBooks.length === 0} style='px-4 py-2 bg-red-50 border border-red-100 rounded-lg text-sm font-medium text-red-600 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-red-100 transition-colors'/>
 
             <select disabled={selectedBooks.length === 0} className="px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm font-medium text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:border-[#41431B]">
               <option value="">Assign to Category</option>
@@ -266,7 +257,7 @@ export default function BooksManagementPage() {
                     </div>
                     
                     {/* Actions */}
-                    <div className="w-28 flex justify-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="w-28 flex justify-center gap-1 ">
                       <button className="p-1.5 hover:bg-gray-200 rounded-full transition-colors text-gray-500 hover:text-[#41431B]" title="View Details">
                         <RemoveRedEyeOutlinedIcon fontSize="small" />
                       </button>
