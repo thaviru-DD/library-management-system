@@ -12,6 +12,7 @@ import Navbar from '@/components/shared/Navbar';
 import SearchIcon from '@mui/icons-material/Search';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { useState } from 'react';
+import Footer from '@/components/shared/Footer';
 
 
 const books = [
@@ -170,6 +171,7 @@ function Page() {
         </motion.div>
 
       </main>
+      <Footer/>
     </div>
   )
 }
