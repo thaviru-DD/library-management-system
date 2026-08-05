@@ -17,7 +17,6 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
 import Button from '@/components/shared/Button';
 import CheckBox from '@/components/shared/CheckBox';
-import { filter } from 'framer-motion/client';
 
 // Mock Data
 const initialUsers = [
@@ -34,35 +33,77 @@ export default function UsersManagementPage() {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [Open, setOpen] = useState(false);
 
+  // Filter state — these now actually drive the table
+  const [roleFilter, setRoleFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState('all');
+
+  // FIX: this used to read from `initialUsers` (the static mock array), so
+  // status changes on `users` never showed up in the table. It now reads
+  // from `users` and also applies the Role/Status filters.
+  const filteredMembers = users.filter((user) => {
+    const query = searchQuery.trim().toLowerCase();
+    const matchesSearch =
+      query === '' ||
+      user.name.toLowerCase().includes(query) ||
+      user.email.toLowerCase().includes(query);
+
+    const matchesRole = roleFilter === 'all' || user.role.toLowerCase() === roleFilter.toLowerCase();
+    const matchesStatus = statusFilter === 'all' || user.status.toLowerCase() === statusFilter.toLowerCase();
+
+    return matchesSearch && matchesRole && matchesStatus;
+  });
+
   // Handle individual row selection
   const toggleSelection = (id) => {
-    setSelectedUsers(prev => 
+    setSelectedUsers(prev =>
       prev.includes(id) ? prev.filter(userId => userId !== id) : [...prev, id]
     );
   };
 
-  // Handle "Select All" checkbox
+  // Handle "Select All" checkbox — only affects the currently visible (filtered) rows
   const toggleSelectAll = () => {
-    if (selectedUsers.length === users.length) {
-      setSelectedUsers([]);
+    const visibleIds = filteredMembers.map((user) => user.id);
+    const allVisibleSelected = visibleIds.length > 0 && visibleIds.every((id) => selectedUsers.includes(id));
+
+    if (allVisibleSelected) {
+      setSelectedUsers((prev) => prev.filter((id) => !visibleIds.includes(id)));
     } else {
-      setSelectedUsers(users.map(user => user.id));
+      setSelectedUsers((prev) => [...new Set([...prev, ...visibleIds])]);
     }
   };
 
   // Administrative Action: Change User Status
   const handleStatusChange = (userId, newStatus) => {
-    setUsers(users.map(user => 
+    setUsers(users.map(user =>
       user.id === userId ? { ...user, status: newStatus } : user
     ));
   };
 
   // Bulk Action: Change Status for all selected users
   const handleBulkStatusChange = (newStatus) => {
-    setUsers(users.map(user => 
+    setUsers(users.map(user =>
       selectedUsers.includes(user.id) ? { ...user, status: newStatus } : user
     ));
     setSelectedUsers([]); // Clear selection after action
+  };
+
+  // ---- REGISTER USER ----
+  const handleRegisterUser = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+
+    const newUser = {
+      id: `u${Date.now()}`,
+      name: formData.get('fullName') || 'Unnamed User',
+      email: formData.get('email') || '',
+      role: formData.get('role') || 'User',
+      status: 'Active',
+      joined: new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }),
+    };
+
+    setUsers((prev) => [newUser, ...prev]);
+    e.target.reset();
+    setOpen(false);
   };
 
   // Helpers for styling
@@ -88,10 +129,6 @@ export default function UsersManagementPage() {
     return name.split(' ').map(n => n[0]).join('').toUpperCase();
   };
 
-  const filteredMembers = initialUsers.filter( c=>
-    c.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
   return (
     <div className="min-h-screen bg-[#faf9f6] text-gray-800 font-sans flex">
       <Sidebar />
@@ -104,9 +141,6 @@ export default function UsersManagementPage() {
             <h1 className="text-3xl font-extrabold text-[#41431B] tracking-tight">User Management</h1>
             <p className="text-sm text-gray-500 mt-1">View registered members, manage roles, and enforce account restrictions.</p>
           </div>
-          {/* <button className="flex items-center gap-2 bg-[#41431B] text-[#F8F3E1] px-5 py-2.5 rounded-xl font-semibold shadow-md hover:bg-[#2b2d12] transition-colors">
-            <PersonAddOutlinedIcon fontSize="small" /> Register User
-          </button> */}
           <Button style='flex items-center gap-2 bg-[#41431B] text-[#F8F3E1] px-5 py-2.5 rounded-xl font-semibold shadow-md hover:bg-[#2b2d12] transition-colors' name='Register User' icon={<PersonAddOutlinedIcon fontSize="small" />} onClick={() => setOpen(true)}/>
         </div>
 
@@ -125,14 +159,22 @@ export default function UsersManagementPage() {
 
           <div className="flex items-center gap-3">
             <FilterListIcon className="text-gray-400" />
-            <select className="h-11 px-4 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-700 focus:outline-none focus:border-[#41431B] cursor-pointer">
+            <select
+              value={roleFilter}
+              onChange={(e) => setRoleFilter(e.target.value)}
+              className="h-11 px-4 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-700 focus:outline-none focus:border-[#41431B] cursor-pointer"
+            >
               <option value="all">All Roles</option>
               <option value="user">Users</option>
               <option value="librarian">Librarians</option>
               <option value="admin">Admins</option>
             </select>
 
-            <select className="h-11 px-4 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-700 focus:outline-none focus:border-[#41431B] cursor-pointer">
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="h-11 px-4 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-700 focus:outline-none focus:border-[#41431B] cursor-pointer"
+            >
               <option value="all">All Statuses</option>
               <option value="active">Active</option>
               <option value="deactivated">Deactivated</option>
@@ -157,7 +199,7 @@ export default function UsersManagementPage() {
               {/* Table Header */}
               <div className="flex items-center bg-[#F8F3E1]/60 px-4 py-3 rounded-xl mb-2">
                 <div className="w-12 flex justify-center">
-                  <input type="checkbox" checked={selectedUsers.length === users.length && users.length > 0} onChange={toggleSelectAll} className="w-4 h-4 accent-[#41431B] cursor-pointer"/>
+                  <input type="checkbox" checked={filteredMembers.length > 0 && filteredMembers.every((user) => selectedUsers.includes(user.id))} onChange={toggleSelectAll} className="w-4 h-4 accent-[#41431B] cursor-pointer"/>
                 </div>
                 <h3 className="flex-1 text-left pl-4 font-bold text-xs uppercase tracking-wider text-gray-500">Member Details</h3>
                 <h3 className="w-32 text-left font-bold text-xs uppercase tracking-wider text-gray-500">Role</h3>
@@ -265,36 +307,40 @@ export default function UsersManagementPage() {
 
         {/* Modal for Registering a New User */}
         <Modal open={Open} onClose={() => setOpen(false)}>
-            <div className='w-100 h-125'>
-              <h2 className='text-3xl font-bold'>Register user</h2>
+            <div className='w-full max-w-lg max-h-[85vh] overflow-y-auto pr-1'>
+              <h2 className='text-3xl font-bold text-[#41431B]'>Register user</h2>
               <p>Add new member to libruary system</p>
 
-              <div className='mt-6 flex flex-col gap-4'>
+              <form onSubmit={handleRegisterUser} className='mt-6 flex flex-col gap-4'>
                 <div>
-                  <label htmlFor="name">Full name</label>
-                  <input type="text" id="name" name="name" className='w-full mt-2 p-2 border rounded-lg border-gray-200' placeholder='Enter full name' />
+                  <label htmlFor="fullName">Full name</label>
+                  <input type="text" id="fullName" name="fullName" required className='w-full mt-2 p-2 border rounded-lg border-gray-200' placeholder='Enter full name' />
                 </div>
                 <div>
-                  <label htmlFor="name">Email</label>
-                  <input type="text" id="name" name="name" className='w-full mt-2 p-2 border rounded-lg border-gray-200' placeholder='jhondoil@gmail.com' />
+                  <label htmlFor="email">Email</label>
+                  <input type="email" id="email" name="email" required className='w-full mt-2 p-2 border rounded-lg border-gray-200' placeholder='jhondoil@gmail.com' />
                 </div>
                 <div>
-                  <label htmlFor="name">Role</label>
-                  <input type="text" id="name" name="name" className='w-full mt-2 p-2 border rounded-lg border-gray-200' placeholder='Admin, user' />
+                  <label htmlFor="role">Role</label>
+                  <select id="role" name="role" defaultValue="User" className='w-full mt-2 p-2 border rounded-lg border-gray-200'>
+                    <option value="Admin">Admin</option>
+                    <option value="Librarian">Librarian</option>
+                    <option value="User">User</option>
+                  </select>
                 </div>
                 <div>
-                  <label htmlFor="name">Tempory password</label>
-                  <input type="text" id="name" name="name" className='w-full mt-2 p-2 border rounded-lg border-gray-200' placeholder='***************' />
+                  <label htmlFor="tempPassword">Tempory password</label>
+                  <input type="password" id="tempPassword" name="tempPassword" required className='w-full mt-2 p-2 border rounded-lg border-gray-200' placeholder='***************' />
                 </div>
                 <div className='flex justify-between items-center mt-4'>
-                <button type="button" onClick={() => setOpen(false)} className="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-600 font-semibold text-sm hover:bg-gray-50">
+                  <button type="button" onClick={() => setOpen(false)} className="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-600 font-semibold text-sm hover:bg-gray-50">
                     Cancel
                   </button>
-                  <button type="submit" onClick={() => setOpen(false)} className="px-5 py-2.5 rounded-xl bg-[#41431B] text-[#F8F3E1] font-semibold text-sm shadow-md hover:bg-[#2b2d12]">
+                  <button type="submit" className="px-5 py-2.5 rounded-xl bg-[#41431B] text-[#F8F3E1] font-semibold text-sm shadow-md hover:bg-[#2b2d12]">
                     Save Changes
                   </button>
                 </div>
-              </div>
+              </form>
             </div>
         </Modal>
       </main>
