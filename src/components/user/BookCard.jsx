@@ -8,10 +8,9 @@ import CloseIcon from "@mui/icons-material/Close";
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 
-
 export default function BookCard({ book }) {
     const [showDetails, setShowDetails] = useState(false);
-    const [quantity, setQuantity] = useState(1);
+    const [duration, setDuration] = useState(7);
     const [mounted, setMounted] = useState(false);
     const [isFavorite, setIsFavorite] = useState(false);
 
@@ -66,6 +65,40 @@ export default function BookCard({ book }) {
         };
     }, [showDetails]);
 
+    // Calculates the return date shown next to the duration selector
+    const getReturnDate = (days) => {
+        const returnDate = new Date();
+        returnDate.setDate(returnDate.getDate() + days);
+        return returnDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    };
+
+    // Handles the reservation logic and saves to localStorage
+    const handleReserve = () => {
+        const startDate = new Date();
+        const endDate = new Date();
+        endDate.setDate(endDate.getDate() + duration);
+
+        const newReservation = {
+            ...book, // Copy all book details
+            startDate: startDate.toISOString(),
+            endDate: endDate.toISOString(),
+            duration: duration
+        };
+
+        // Get existing reservations, remove this book if it was already reserved, and add the new reservation
+        const existingReservations = JSON.parse(localStorage.getItem('reservedBooks')) || [];
+        const updatedReservations = existingReservations.filter(r => r.title !== book.title);
+        updatedReservations.push(newReservation);
+        
+        localStorage.setItem('reservedBooks', JSON.stringify(updatedReservations));
+
+        console.log(`Reserved "${book.title}" for ${duration} days`);
+        setShowDetails(false);
+        
+        // Show a quick browser alert for user feedback
+        alert(`Successfully reserved "${book.title}" until ${getReturnDate(duration)}.`);
+    };
+
     // Modal Content mapped to a Portal
     const modalContent = (showDetails && mounted) ? createPortal(
         <div
@@ -115,34 +148,34 @@ export default function BookCard({ book }) {
                         {book.description}
                     </p>
 
-                    {/* Quantity Selector */}
+                    {/* Reservation Period Selector */}
                     <div className="mt-5 flex items-center gap-3">
-                        <label htmlFor="quantity" className="font-semibold text-sm text-[#3D2B1F]">
-                            Quantity
+                        <label htmlFor="duration" className="font-semibold text-sm text-[#3D2B1F]">
+                            Reservation Period
                         </label>
 
                         <select
-                            id="quantity"
+                            id="duration"
                             className="border border-[#3D2B1F]/15 rounded-lg px-3 py-1.5 text-sm text-[#3D2B1F] focus:outline-none focus:border-[#41431B] cursor-pointer"
-                            value={quantity}
-                            onChange={(e) => setQuantity(Number(e.target.value))}
+                            value={duration}
+                            onChange={(e) => setDuration(Number(e.target.value))}
                         >
-                            {[1, 2, 3, 4, 5].map((n) => (
-                                <option key={n} value={n}>{n}</option>
+                            {[7, 14, 21].map((days) => (
+                                <option key={days} value={days}>{days} days</option>
                             ))}
                         </select>
                     </div>
 
-                    {/* Dynamic Price */}
-                    <h3 className="text-xl font-serif font-semibold mt-5 text-[#3D2B1F]">
-                        Rs. {(book.price * quantity).toLocaleString()}
-                    </h3>
+                    {/* Return-by date, based on the selected period */}
+                    <p className="mt-3 text-sm text-[#8C7B6B]">
+                        Return by <span className="font-semibold text-[#3D2B1F]">{getReturnDate(duration)}</span>
+                    </p>
 
-                    {/* Buy Button */}
+                    {/* Reserve Button */}
                     <Button
-                        name="Buy Now"
+                        name="Reserve"
                         style="bg-[#41431B] text-[#F8F3E1] px-6 py-2.5 rounded-xl mt-5 font-semibold text-sm hover:bg-[#2b2d12] transition-colors w-max"
-                        onClick={() => console.log("Buying book")}
+                        onClick={handleReserve}
                     />
                 </div>
             </div>
@@ -169,7 +202,7 @@ export default function BookCard({ book }) {
                     )}
                 </button>
 
-                {/* RESTORED: Book Cover Image */}
+                {/* Book Cover Image */}
                 <div className="relative w-full aspect-[3/4] rounded-lg overflow-hidden bg-[#FBF6EC]">
                     <Image
                         src={book.image}
@@ -179,13 +212,13 @@ export default function BookCard({ book }) {
                     />
                 </div>
 
-                {/* RESTORED: Book Title and Author */}
+                {/* Book Title and Author */}
                 <h2 className="text-center font-serif font-semibold text-[#3D2B1F] mt-3 truncate">
                     {book.title}
                 </h2>
                 <p className="text-center text-sm text-[#8C7B6B] truncate">{book.author}</p>
 
-                {/* RESTORED: View Details Button */}
+                {/* View Details Button */}
                 <button
                     onClick={() => setShowDetails(true)}
                     className="bg-[#41431B] text-[#F8F3E1] px-5 py-2 rounded-xl mt-auto pt-2 text-sm font-semibold cursor-pointer hover:bg-[#2b2d12] transition-colors"

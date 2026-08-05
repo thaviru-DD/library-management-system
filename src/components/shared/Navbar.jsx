@@ -25,7 +25,7 @@ const navItems = [
   { label: 'Books', link: '/books', icon: <BookIcon /> },
   { label: 'Categories', link: '/categories', icon: <CategoryIcon /> },
   { label: 'Favourite', link: '/favouritePage', icon: <FavoriteIcon /> },
-  { label: 'Cart', link: '/cart', icon: <ShoppingCartIcon /> },
+  { label: 'Resavations', link: '/resavations', icon: <ShoppingCartIcon /> },
 ]
 
 const categoriesLinks = [
