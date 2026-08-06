@@ -1,14 +1,11 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Navbar from '@/components/shared/Navbar';
 import Image from 'next/image';
 import Footer from '@/components/shared/Footer';
-import { div, h1 } from 'framer-motion/client';
-
-
 
 const credDescriptions = [
   {title:"Book Sales" , description:"Explore a wide collection of books from different categories, including fiction, novels, educational books, self-development, biographies, and more. Find your favorite books at affordable prices and discover something new to read." },
@@ -26,30 +23,44 @@ const updateStats =[
 
 export default function Home() {
   const videoRef = useRef(null);
+  
+  // 1. Add refs and state for Navbar color change
+  const aboutSectionRef = useRef(null); 
+  const [isNavDark, setIsNavDark] = useState(false);
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    // Make sure metadata (duration) is loaded before we try to scrub
     const handleLoadedMetadata = () => {
       window.addEventListener('scroll', handleScroll);
     };
 
     const handleScroll = () => {
-      if (!video.duration) return;
+      // --- Background Video Scrubbing Logic ---
+      if (video.duration) {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const scrollFraction = docHeight > 0 ? scrollTop / docHeight : 0;
+        const targetTime = scrollFraction * video.duration;
+        video.currentTime = targetTime;
+      }
 
-      const scrollTop = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const scrollFraction = docHeight > 0 ? scrollTop / docHeight : 0;
-
-      const targetTime = scrollFraction * video.duration;
-      video.currentTime = targetTime;
+      // --- Navbar Theme Switching Logic ---
+      if (aboutSectionRef.current) {
+        const rect = aboutSectionRef.current.getBoundingClientRect();
+        // 80px accounts for the height of the navbar itself. 
+        // Once the section hits this threshold, swap the colors.
+        if (rect.top <= 80) {
+          setIsNavDark(true);
+        } else {
+          setIsNavDark(false);
+        }
+      }
     };
 
     video.addEventListener('loadedmetadata', handleLoadedMetadata);
 
-    // In case metadata is already loaded by the time this runs
     if (video.readyState >= 1) {
       handleLoadedMetadata();
     }
@@ -75,7 +86,13 @@ export default function Home() {
         <div className="absolute top-0 left-0 w-full h-full bg-black/50"></div>
       </div>
 
-      <Navbar style='text-white' titleStyle='text-white' IconStyle='text-white' />
+      {/* 2. Pass dynamic props to Navbar based on scroll state */}
+      <Navbar 
+        navbarStyle={isNavDark ? 'bg-[#FBF6EC] shadow-md transition-colors duration-300 ease-in-out' : 'bg-transparent transition-colors duration-300 ease-in-out'}
+        style={isNavDark ? 'text-[#3D2B1F]' : 'text-white'} 
+        titleStyle={isNavDark ? 'text-[#3D2B1F]' : 'text-white'} 
+        IconStyle={isNavDark ? 'text-[#3D2B1F]' : 'text-white'} 
+      />
 
       <div className="px-6 sm:px-10 md:px-20 pt-12 md:pt-20">
         <motion.h4 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease: "easeOut" }} className="mt-12 md:mt-20 font-bold text-white">
@@ -139,7 +156,6 @@ export default function Home() {
        </motion.div>
       </motion.div>
 
-
       <div className='flex flex-col sm:flex-row flex-wrap justify-center sm:justify-between gap-6 mt-20 md:mt-30 px-6 md:px-20'>
         {credDescriptions.map((service) => 
           <div key={service.title} className='w-full sm:w-[45%] lg:w-60 h-auto lg:h-80 p-4 border border-gray-200 rounded-lg'>
@@ -164,14 +180,13 @@ export default function Home() {
         <h1 className='text-white text-4xl md:text-5xl font-bold'>Thank You !</h1>
       </div>
       
-      {/* home page colour section */}
-      <div className='bg-ivory w-full h-auto rounded-t-4xl mt-20 md:mt-30 px-6 md:px-20 py-8'>
+      {/* 3. Attach the ref to the section container */}
+      <div ref={aboutSectionRef} className='bg-ivory w-full h-auto rounded-t-4xl mt-20 md:mt-30 px-6 md:px-20 py-8 relative z-10'>
         <div className='flex justify-center'>
           <div className=' w-50 h-2 rounded-full bg-[#1F150C]/50'></div>
         </div>
 
         {/* About us section */}
-
         <div className='flex flex-col md:flex-row gap-10 mt-14 md:mt-20'>
           <div className='flex flex-col gap-4 w-full'>
             <div className='flex flex-col gap-2'>
@@ -188,7 +203,6 @@ export default function Home() {
         <div className='text-center bg-[#1F150C] w-full h-[1px] mt-14 md:mt-20'></div>
 
         {/* updated static section */}
-
         <div className='py-5'>
           <h1 className='text-3xl md:text-4xl font-bold text-[#1F150C] text-center'>Library Updated statistics</h1>
 
@@ -200,14 +214,10 @@ export default function Home() {
               </div>
               )}
           </div>
-
         </div>
-
       </div>
 
       <Footer/>
-
-      
-      </div>
+    </div>
   );
 }

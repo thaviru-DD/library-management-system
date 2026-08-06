@@ -46,7 +46,7 @@ export default function FavouritePage() {
 
   return (
     <div className='bg-[#FBF6EC] min-h-screen flex flex-col'>
-      <Navbar style='text-[#3D2B1F]' titleStyle='text-[#3D2B1F]' navbarStyle='bg-[#FBF6EC]'/>
+      <Navbar style='text-[#3D2B1F]' titleStyle='text-[#3D2B1F]'/>
 
       <main className="flex-1 px-6 sm:px-12 lg:px-20 pt-32 pb-24">
         
@@ -91,7 +91,7 @@ export default function FavouritePage() {
               You haven't added any books to your favourites yet. Explore our categories to find your next great read.
             </p>
             <Link 
-              href="/books" 
+              href="/categories" 
               className="bg-[#41431B] text-[#F8F3E1] px-6 py-3 rounded-xl text-sm font-semibold hover:bg-[#2b2d12] transition-colors shadow-md"
             >
               Browse Categories
