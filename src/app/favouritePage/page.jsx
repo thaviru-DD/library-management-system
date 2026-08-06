@@ -91,7 +91,7 @@ export default function FavouritePage() {
               You haven't added any books to your favourites yet. Explore our categories to find your next great read.
             </p>
             <Link 
-              href="/categories" 
+              href="/books" 
               className="bg-[#41431B] text-[#F8F3E1] px-6 py-3 rounded-xl text-sm font-semibold hover:bg-[#2b2d12] transition-colors shadow-md"
             >
               Browse Categories

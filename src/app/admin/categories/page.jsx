@@ -82,30 +82,30 @@ export default function CategoriesManagementPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#faf9f6] text-gray-800 font-sans flex">
+    <div className="min-h-screen w-full overflow-x-hidden bg-[#faf9f6] text-gray-800 font-sans">
       <Sidebar />
       
-      <main className="ml-64 flex-1 p-10 flex flex-col gap-8">
+      <main className="md:ml-64 min-w-0 pt-20 md:pt-10 p-4 sm:p-6 md:p-10 flex flex-col gap-6 md:gap-8">
         
         {/* HEADER */}
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
           <div>
-            <h1 className="text-3xl font-extrabold text-[#41431B] tracking-tight">Category Management</h1>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#41431B] tracking-tight">Category Management</h1>
             <p className="text-sm text-gray-500 mt-1">Organize your catalog by adding, editing, or removing book categories.</p>
           </div>
-          <Button name="Add Category" icon={<AddIcon fontSize="small" />} onClick={openAddModal} style="flex items-center gap-2 bg-[#41431B] text-[#F8F3E1] px-5 py-2.5 rounded-xl font-semibold shadow-md hover:bg-[#2b2d12] transition-colors cursor-pointer"/>
+          <Button name="Add Category" icon={<AddIcon fontSize="small" />} onClick={openAddModal} style="w-full sm:w-auto flex items-center justify-center gap-2 bg-[#41431B] text-[#F8F3E1] px-5 py-2.5 rounded-xl font-semibold shadow-md hover:bg-[#2b2d12] transition-colors cursor-pointer"/>
         </div>
 
         {/* SEARCH BAR */}
         <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center">
-          <div className="relative w-96">
+          <div className="relative w-full sm:w-96">
             <SearchIcon className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-400" fontSize="small" />
             <input type="text" placeholder="Search categories..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="w-full h-11 pl-10 pr-4 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#41431B] focus:bg-white transition-colors"/>
           </div>
         </div>
 
         {/* DATA TABLE */}
-        <div className="bg-white shadow-sm border border-gray-100 rounded-3xl p-6 flex flex-col">
+        <div className="bg-white shadow-sm border border-gray-100 rounded-3xl p-4 sm:p-6 flex flex-col min-w-0">
           <div className="overflow-x-auto">
             <div className="min-w-[800px]">
               
@@ -164,10 +164,10 @@ export default function CategoriesManagementPage() {
 
       {/* MODAL FOR ADDING A NEW CATEGORY AND EDIT */}
             <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)}>
-              <div className='w-100 h-100'>
+              <div className='w-[85vw] max-w-100 max-h-[85vh] overflow-y-auto'>
                 <div className="flex justify-between items-center mb-6">
                   <div>
-                    <h2 className="text-2xl font-bold text-[#41431B]">
+                    <h2 className="text-xl sm:text-2xl font-bold text-[#41431B]">
                       {modalMode === 'add' ? 'Add Category' : 'Edit Category'}
                     </h2>
                     <p className="text-sm text-gray-500 mt-1">
@@ -188,7 +188,7 @@ export default function CategoriesManagementPage() {
                 </div> 
 
                 {/* Action Buttons */}
-                 <div className="flex gap-3 mt-4">
+                 <div className="flex flex-col-reverse sm:flex-row gap-3 mt-4">
                   <button type="button" onClick={() => setIsModalOpen(false)} className="flex-1 py-3 rounded-xl border border-gray-200 text-gray-700 font-semibold text-sm hover:bg-gray-50 transition-colors">
                     Cancel
                   </button>

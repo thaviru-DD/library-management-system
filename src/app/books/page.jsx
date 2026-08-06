@@ -59,25 +59,25 @@ function Page() {
       <main className="flex-1 overflow-x-hidden">
 
         {/* HERO */}
-        <div className="relative px-6 sm:px-12 lg:px-20 pt-28">
-          <div className="relative rounded-[2rem] overflow-hidden shadow-xl">
+        <div className="relative px-4 sm:px-12 lg:px-20 pt-24 sm:pt-28">
+          <div className="relative rounded-2xl sm:rounded-[2rem] overflow-hidden shadow-xl">
             <Image
               src="/background-images/stack-books-with-library-scene.jpg"
               alt="Stacks of books in a warmly lit library"
               width={1600}
               height={640}
-              className="w-full h-[420px] object-cover"
+              className="w-full h-[260px] sm:h-[360px] lg:h-[420px] object-cover"
               priority
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#221708]/85 via-[#221708]/30 to-transparent" />
 
-            <div className="absolute inset-0 flex flex-col justify-end p-8 sm:p-12">
-              <SpineMark className="mb-4" />
+            <div className="absolute inset-0 flex flex-col justify-end p-5 sm:p-8 lg:p-12">
+              <SpineMark className="mb-3 sm:mb-4" />
               <motion.h1
                 initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: 'easeOut' }}
-                className="font-serif text-4xl sm:text-5xl lg:text-6xl font-semibold text-[#FBF6EC] max-w-xl leading-[1.05]"
+                className="font-serif text-3xl sm:text-5xl lg:text-6xl font-semibold text-[#FBF6EC] max-w-xl leading-[1.05]"
               >
                 Find your next chapter
               </motion.h1>
@@ -85,7 +85,7 @@ function Page() {
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: 'easeOut', delay: 0.15 }}
-                className="mt-4 text-[#FBF6EC]/80 max-w-md text-base sm:text-lg"
+                className="mt-3 sm:mt-4 text-[#FBF6EC]/80 max-w-md text-sm sm:text-lg"
               >
                 Thousands of titles, borrowed in seconds, waiting on the shelf for you.
               </motion.p>
@@ -97,9 +97,9 @@ function Page() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: 'easeOut', delay: 0.3 }}
-            className="relative sm:absolute sm:left-20 sm:right-20 sm:-bottom-8 mt-4 sm:mt-0 bg-white/90 backdrop-blur-md p-3 rounded-2xl shadow-lg border border-[#3D2B1F]/5 flex flex-wrap gap-3 items-center"
+            className="relative sm:absolute sm:left-12 lg:left-20 sm:right-12 lg:right-20 sm:-bottom-8 mt-4 sm:mt-0 bg-white/90 backdrop-blur-md p-3 rounded-2xl shadow-lg border border-[#3D2B1F]/5 flex flex-col sm:flex-row gap-3 sm:items-center"
           >
-            <div className="relative flex-1 min-w-[240px]">
+            <div className="relative w-full sm:flex-1 sm:min-w-[200px]">
               <SearchIcon className="absolute top-1/2 left-3 -translate-y-1/2 text-[#8C7B6B]" fontSize="small" />
               <input
                 type="text"
@@ -110,15 +110,15 @@ function Page() {
             </div>
 
             <div className="flex items-center gap-2">
-              <FilterListIcon className="text-[#8C7B6B] hidden sm:block" fontSize="small" />
-              <select className="h-12 px-4 bg-[#FBF6EC] border border-[#3D2B1F]/10 rounded-xl text-sm text-[#3D2B1F] focus:outline-none focus:border-[#41431B] cursor-pointer">
+              <FilterListIcon className="text-[#8C7B6B] hidden sm:block shrink-0" fontSize="small" />
+              <select className="w-full sm:w-auto h-12 px-4 bg-[#FBF6EC] border border-[#3D2B1F]/10 rounded-xl text-sm text-[#3D2B1F] focus:outline-none focus:border-[#41431B] cursor-pointer">
                 <option value="all">All categories</option>
                 <option value="fiction">Fiction</option>
                 <option value="science">Science</option>
                 <option value="history">History</option>
               </select>
 
-              <select className="h-12 px-4 bg-[#FBF6EC] border border-[#3D2B1F]/10 rounded-xl text-sm text-[#3D2B1F] focus:outline-none focus:border-[#41431B] cursor-pointer">
+              <select className="w-full sm:w-auto h-12 px-4 bg-[#FBF6EC] border border-[#3D2B1F]/10 rounded-xl text-sm text-[#3D2B1F] focus:outline-none focus:border-[#41431B] cursor-pointer">
                 <option value="all">All statuses</option>
                 <option value="available">Available</option>
                 <option value="reserved">Reserved</option>
@@ -134,7 +134,7 @@ function Page() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.15 }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="px-6 sm:px-12 lg:px-20 mt-20 sm:mt-16 pb-24"
+          className="px-4 sm:px-12 lg:px-20 mt-28 sm:mt-16 pb-24"
         >
           <div className="flex items-center gap-3 mb-1">
             <SpineMark />
@@ -142,8 +142,8 @@ function Page() {
               On the shelf
             </span>
           </div>
-          <div className="flex justify-between items-end mb-8">
-            <h2 className="font-serif text-3xl sm:text-4xl text-[#3D2B1F] font-semibold">
+          <div className="flex justify-between items-end mb-6 sm:mb-8">
+            <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl text-[#3D2B1F] font-semibold">
               Popular books
             </h2>
             <span className="text-sm text-[#8C7B6B] hidden sm:block">
@@ -152,11 +152,11 @@ function Page() {
           </div>
 
           {filteredBooks.length === 0 ? (
-            <div className="text-center py-20 border border-dashed border-[#3D2B1F]/15 rounded-2xl">
+            <div className="text-center py-16 sm:py-20 border border-dashed border-[#3D2B1F]/15 rounded-2xl">
               <p className="text-[#8C7B6B]">No books match your search.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
               {filteredBooks.map((book) => (
                 <motion.div
                   key={book.title + book.image}

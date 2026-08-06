@@ -93,29 +93,29 @@ export default function AdminDashboard() {
     <div className="min-h-screen bg-[#faf9f6] text-gray-800 font-sans">
       <Sidebar />
 
-      <main className="ml-64 flex flex-col gap-8 p-10">
+      <main className="md:ml-64 pt-20 md:pt-10 flex flex-col gap-6 md:gap-8 p-4 sm:p-6 md:p-10">
 
         {/* TOP BAR */}
-        <motion.header initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="flex justify-between items-center bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+        <motion.header initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
           <div className="pl-2">
-            <h1 className="text-2xl font-extrabold text-[#41431B] tracking-tight">Dashboard Overview</h1>
+            <h1 className="text-xl sm:text-2xl font-extrabold text-[#41431B] tracking-tight">Dashboard Overview</h1>
             <p className="text-sm text-gray-500 mt-1">Welcome back, Admin. Here is what's happening today.</p>
           </div>
 
-          <div className="flex items-center gap-5">
-            <div className="relative group">
+          <div className="flex items-center justify-between md:justify-end gap-3 md:gap-5">
+            <div className="relative group flex-1 md:flex-none">
               <SearchIcon className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-400 group-focus-within:text-[#41431B] transition-colors" fontSize="small" />
-              <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Search books, users..." className="bg-gray-50 w-72 h-10 pl-10 pr-4 border border-transparent rounded-full shadow-inner text-sm outline-none focus:border-[#41431B] focus:bg-white transition-all duration-300"/>
+              <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Search books, users..." className="bg-gray-50 w-full md:w-72 h-10 pl-10 pr-4 border border-transparent rounded-full shadow-inner text-sm outline-none focus:border-[#41431B] focus:bg-white transition-all duration-300"/>
             </div>
 
-            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="relative w-10 h-10 flex items-center justify-center rounded-full bg-gray-50 border border-gray-100 hover:bg-[#F8F3E1] transition-colors">
+            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="relative w-10 h-10 flex-shrink-0 flex items-center justify-center rounded-full bg-gray-50 border border-gray-100 hover:bg-[#F8F3E1] transition-colors">
               <NotificationsOutlinedIcon fontSize="small" className="text-gray-600" />
               <span className="absolute top-2 right-2 w-2 h-2 bg-orange-500 rounded-full border border-white" />
             </motion.button>
 
-            <div className="h-10 w-px bg-gray-200"></div>
+            <div className="h-10 w-px bg-gray-200 hidden sm:block"></div>
 
-            <div className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity">
+            <div className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity flex-shrink-0">
               <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#41431B] to-[#AEB784] text-white flex items-center justify-center font-bold shadow-md">
                 A
               </div>
@@ -124,23 +124,23 @@ export default function AdminDashboard() {
         </motion.header>
 
         {/* QUICK ACTIONS */}
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} className="flex gap-4">
-          <Button name='Add New Book' style="flex items-center gap-2 bg-white px-5 py-2.5 rounded-xl border border-gray-200 shadow-sm hover:border-[#AEB784] hover:shadow-md transition-all text-sm font-semibold text-gray-700" icon={<AddCircleOutlineOutlinedIcon fontSize="small" className="text-[#AEB784]" />} onClick={() => setIsAddBookModalOpen(true)}/>
-          <Button name='Register User' style="flex items-center gap-2 bg-white px-5 py-2.5 rounded-xl border border-gray-200 shadow-sm hover:border-[#AEB784] hover:shadow-md transition-all text-sm font-semibold text-gray-700" icon={<PersonAddOutlinedIcon fontSize="small" className="text-[#AEB784]" />} onClick={() => setOpen(true)} />
-          <Button name='Export Reports' style="flex items-center gap-2 bg-white px-5 py-2.5 rounded-xl border border-gray-200 shadow-sm hover:border-[#AEB784] hover:shadow-md transition-all text-sm font-semibold text-gray-700" icon={<FileDownloadOutlinedIcon fontSize="small" className="text-[#AEB784]" />} onClick={() => setIsAddBookModalOpen(true)}/>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} className="flex flex-wrap gap-3 md:gap-4">
+          <Button name='Add New Book' style="flex items-center gap-2 bg-white px-4 md:px-5 py-2.5 rounded-xl border border-gray-200 shadow-sm hover:border-[#AEB784] hover:shadow-md transition-all text-sm font-semibold text-gray-700" icon={<AddCircleOutlineOutlinedIcon fontSize="small" className="text-[#AEB784]" />} onClick={() => setIsAddBookModalOpen(true)}/>
+          <Button name='Register User' style="flex items-center gap-2 bg-white px-4 md:px-5 py-2.5 rounded-xl border border-gray-200 shadow-sm hover:border-[#AEB784] hover:shadow-md transition-all text-sm font-semibold text-gray-700" icon={<PersonAddOutlinedIcon fontSize="small" className="text-[#AEB784]" />} onClick={() => setOpen(true)} />
+          <Button name='Export Reports' style="flex items-center gap-2 bg-white px-4 md:px-5 py-2.5 rounded-xl border border-gray-200 shadow-sm hover:border-[#AEB784] hover:shadow-md transition-all text-sm font-semibold text-gray-700" icon={<FileDownloadOutlinedIcon fontSize="small" className="text-[#AEB784]" />} onClick={() => setIsAddBookModalOpen(true)}/>
         </motion.div>
 
         {/* STAT CARDS */}
-        <motion.div variants={containerVariants} initial="hidden" animate="show" className="grid grid-cols-4 gap-6">
+        <motion.div variants={containerVariants} initial="hidden" animate="show" className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {stats.map((stat) => (
-            <motion.div key={stat.label} variants={itemVariants} whileHover={{ y: -5 }} className="bg-white shadow-sm hover:shadow-md border border-gray-100 rounded-2xl p-6 flex flex-col justify-between transition-shadow relative overflow-hidden">
+            <motion.div key={stat.label} variants={itemVariants} whileHover={{ y: -5 }} className="bg-white shadow-sm hover:shadow-md border border-gray-100 rounded-2xl p-4 sm:p-6 flex flex-col justify-between transition-shadow relative overflow-hidden">
               <div className="flex justify-between items-start mb-4">
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-white shadow-inner ${stat.accent}`}>{stat.icon}</div>
+                <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-white shadow-inner ${stat.accent}`}>{stat.icon}</div>
                 <div className="flex items-center gap-1 text-xs font-semibold text-green-600 bg-green-50 px-2 py-1 rounded-full"><TrendingUpIcon fontSize="inherit" />{stat.trend}</div>
               </div>
               <div>
-                <p className="text-3xl font-extrabold text-[#41431B]">{stat.value}</p>
-                <div className="flex items-center gap-2 mt-1">
+                <p className="text-2xl sm:text-3xl font-extrabold text-[#41431B]">{stat.value}</p>
+                <div className="flex flex-wrap items-center gap-x-2 mt-1">
                   <p className="text-gray-500 text-sm font-medium">{stat.label}</p>
                   {stat.unit && <p className="text-gray-400 text-xs">({stat.unit})</p>}
                 </div>
@@ -151,50 +151,54 @@ export default function AdminDashboard() {
         </motion.div>
 
         {/* MAIN CONTENT GRID */}
-        <div className="grid grid-cols-3 gap-8 items-start">
-          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.4 }} className="col-span-2 bg-white shadow-sm border border-gray-100 rounded-3xl p-7">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 items-start">
+          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.4 }} className="lg:col-span-2 bg-white shadow-sm border border-gray-100 rounded-3xl p-4 sm:p-7">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-bold text-[#41431B]">Recent Reservations</h2>
+              <h2 className="text-lg sm:text-xl font-bold text-[#41431B]">Recent Reservations</h2>
               <button className="text-sm font-semibold text-[#AEB784] hover:text-[#41431B] transition-colors">View All</button>
             </div>
-            <div className="flex flex-col">
-              <div className="flex items-center bg-[#F8F3E1]/60 px-4 py-3 rounded-xl mb-2">
-                <h3 className="w-12 text-center font-bold text-xs uppercase tracking-wider text-gray-500">ID</h3>
-                <h3 className="w-16 text-center font-bold text-xs uppercase tracking-wider text-gray-500">Cover</h3>
-                <h3 className="flex-1 text-left pl-4 font-bold text-xs uppercase tracking-wider text-gray-500">Book Details</h3>
-                <h3 className="w-28 text-center font-bold text-xs uppercase tracking-wider text-gray-500">Category</h3>
-                <h3 className="w-24 text-center font-bold text-xs uppercase tracking-wider text-gray-500">Status</h3>
-                <h3 className="w-10 text-center"></h3>
-              </div>
-              <motion.div variants={containerVariants} initial="hidden" animate="show">
-                {reservations.map((book) => (
-                  <motion.div key={book.id} variants={itemVariants} className="flex items-center px-4 py-3 hover:bg-gray-50 transition-colors rounded-xl group border-b border-gray-50 last:border-0">
-                    <h3 className="w-12 text-center text-sm font-medium text-gray-400">#{book.id}</h3>
-                    <div className="w-16 flex justify-center">
-                      <div className="relative w-10 h-14 shadow-sm rounded-md overflow-hidden bg-gray-200">
-                        <Image src={book.cover} alt={book.title} fill className="object-cover" />
+
+            {/* Horizontal scroll wrapper so the fixed-width row layout doesn't break on small screens */}
+            <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
+              <div className="flex flex-col min-w-[560px]">
+                <div className="flex items-center bg-[#F8F3E1]/60 px-4 py-3 rounded-xl mb-2">
+                  <h3 className="w-12 text-center font-bold text-xs uppercase tracking-wider text-gray-500">ID</h3>
+                  <h3 className="w-16 text-center font-bold text-xs uppercase tracking-wider text-gray-500">Cover</h3>
+                  <h3 className="flex-1 text-left pl-4 font-bold text-xs uppercase tracking-wider text-gray-500">Book Details</h3>
+                  <h3 className="w-28 text-center font-bold text-xs uppercase tracking-wider text-gray-500">Category</h3>
+                  <h3 className="w-24 text-center font-bold text-xs uppercase tracking-wider text-gray-500">Status</h3>
+                  <h3 className="w-10 text-center"></h3>
+                </div>
+                <motion.div variants={containerVariants} initial="hidden" animate="show">
+                  {reservations.map((book) => (
+                    <motion.div key={book.id} variants={itemVariants} className="flex items-center px-4 py-3 hover:bg-gray-50 transition-colors rounded-xl group border-b border-gray-50 last:border-0">
+                      <h3 className="w-12 text-center text-sm font-medium text-gray-400">#{book.id}</h3>
+                      <div className="w-16 flex justify-center">
+                        <div className="relative w-10 h-14 shadow-sm rounded-md overflow-hidden bg-gray-200">
+                          <Image src={book.cover} alt={book.title} fill className="object-cover" />
+                        </div>
                       </div>
-                    </div>
-                    <div className="flex-1 pl-4">
-                      <h3 className="text-sm font-bold text-gray-800">{book.title}</h3>
-                      <p className="text-xs text-gray-500 mt-0.5">{book.author}</p>
-                    </div>
-                    <h3 className="w-28 text-center text-sm font-medium text-gray-600">{book.category}</h3>
-                    <div className="w-24 flex justify-center">
-                      <span className={`text-xs font-bold px-3 py-1 rounded-full ${getStatusColor(book.status)}`}>{book.status}</span>
-                    </div>
-                    <div className="w-10 flex justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                      <button className="p-1 hover:bg-gray-200 rounded-full transition-colors">
-                        <MoreVertIcon fontSize="small" className="text-gray-500" />
-                      </button>
-                    </div>
-                  </motion.div>
-                ))}
-              </motion.div>
+                      <div className="flex-1 pl-4">
+                        <h3 className="text-sm font-bold text-gray-800">{book.title}</h3>
+                        <p className="text-xs text-gray-500 mt-0.5">{book.author}</p>
+                      </div>
+                      <h3 className="w-28 text-center text-sm font-medium text-gray-600">{book.category}</h3>
+                      <div className="w-24 flex justify-center">
+                        <span className={`text-xs font-bold px-3 py-1 rounded-full ${getStatusColor(book.status)}`}>{book.status}</span>
+                      </div>
+                      <div className="w-10 flex justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button className="p-1 hover:bg-gray-200 rounded-full transition-colors">
+                          <MoreVertIcon fontSize="small" className="text-gray-500" />
+                        </button>
+                      </div>
+                    </motion.div>
+                  ))}
+                </motion.div>
+              </div>
             </div>
           </motion.div>
 
-          <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.5 }} className="col-span-1 flex flex-col gap-6">
+          <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.5 }} className="lg:col-span-1 flex flex-col gap-6">
             <div className="bg-white shadow-sm border border-gray-100 rounded-3xl p-6">
               <RecentUserActivity />
             </div>
@@ -209,8 +213,8 @@ export default function AdminDashboard() {
       {/* MODAL COMPONENTS */}
       {/* MODAL FOR REGISTERING A NEW USER */}
       <Modal open={open} onClose={() => setOpen(false)}>
-        <div className='w-100 h-125'>
-          <h2 className='text-3xl font-bold text-[#41431B]'>Register user</h2>
+        <div className='w-[85vw] max-w-100 max-h-[85vh] overflow-y-auto'>
+          <h2 className='text-2xl sm:text-3xl font-bold text-[#41431B]'>Register user</h2>
           <p>Add new member to libruary system</p>
       
           <div className='mt-6 flex flex-col gap-4'>
@@ -230,11 +234,11 @@ export default function AdminDashboard() {
               <label htmlFor="name">Tempory password</label>
               <input type="text" id="name" name="name" className='w-full mt-2 p-2 border rounded-lg border-gray-200' placeholder='***************' />
             </div>
-            <div className='flex justify-between items-center mt-4'>
-              <button type="button" onClick={() => setOpen(false)} className="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-600 font-semibold text-sm hover:bg-gray-50">
+            <div className='flex flex-col-reverse sm:flex-row justify-between items-center gap-3 mt-4'>
+              <button type="button" onClick={() => setOpen(false)} className="w-full sm:w-auto px-5 py-2.5 rounded-xl border border-gray-200 text-gray-600 font-semibold text-sm hover:bg-gray-50">
                 Cancel
               </button>
-              <button type="submit" onClick={() => setOpen(false)} className="px-5 py-2.5 rounded-xl bg-[#41431B] text-[#F8F3E1] font-semibold text-sm shadow-md hover:bg-[#2b2d12]">
+              <button type="submit" onClick={() => setOpen(false)} className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-[#41431B] text-[#F8F3E1] font-semibold text-sm shadow-md hover:bg-[#2b2d12]">
                 Save Changes
               </button>
             </div>
@@ -244,11 +248,11 @@ export default function AdminDashboard() {
 
             {/* MODAL FOR ADDING A NEW BOOK */}
       <Modal open={isAddBookModalOpen} onClose={() => setIsAddBookModalOpen(false)}>
-        <div className='w-100 h-125'>
-          <h2 className='text-3xl font-bold text-[#41431B]'>Add new book</h2>
+        <div className='w-[85vw] max-w-100 max-h-[85vh] overflow-y-auto'>
+          <h2 className='text-2xl sm:text-3xl font-bold text-[#41431B]'>Add new book</h2>
           <p>Add new book to library system</p>
 
-          <div className="flex gap-6 items-center bg-gray-50 p-4 rounded-2xl border border-dashed border-gray-300 mt-4">
+          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 items-start sm:items-center bg-gray-50 p-4 rounded-2xl border border-dashed border-gray-300 mt-4">
             <div className="relative w-20 h-28 bg-gray-200 rounded-lg overflow-hidden shadow-sm border border-gray-100 flex-shrink-0">
               {previewImage ? (
                 <Image src={previewImage} alt="Preview" fill className="object-cover" />
@@ -269,7 +273,7 @@ export default function AdminDashboard() {
           </div>
 
           <form onSubmit={(e) => {e.preventDefault();handleSaveBook(); setIsAddBookModalOpen(false);}}className='mt-6 flex flex-col gap-4'>
-            <div className='grid grid-cols-2 gap-6'>
+            <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6'>
               <div>
                 <label htmlFor="bookName">Book name</label>
                 <input type="text" id="bookName" name="bookName" value={bookForm.name} onChange={(e) => setBookForm({ ...bookForm, name: e.target.value })} className='w-full mt-2 p-2 border rounded-lg border-gray-200'placeholder='Enter book name'/>
@@ -279,7 +283,7 @@ export default function AdminDashboard() {
                 <input type="text" id="author" name="author" value={bookForm.author} onChange={(e) => setBookForm({ ...bookForm, author: e.target.value })} className='w-full mt-2 p-2 border rounded-lg border-gray-200'placeholder='Enter book author'/>
               </div>
             </div>
-            <div className='grid grid-cols-2 gap-6'>
+            <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6'>
               <div>
                 <label htmlFor="category">Category</label>
                 <input type="text" id="category" name="category" value={bookForm.category}onChange={(e) => setBookForm({ ...bookForm, category: e.target.value })} className='w-full mt-2 p-2 border rounded-lg border-gray-200'placeholder='History'/>
@@ -289,11 +293,11 @@ export default function AdminDashboard() {
                 <input type="text" id="isbn" name="isbn" value={bookForm.isbn} onChange={(e) => setBookForm({ ...bookForm, isbn: e.target.value })} className='w-full mt-2 p-2 border rounded-lg border-gray-200' placeholder='236-751'/>
               </div>
             </div>
-            <div className='flex justify-between items-center mt-4'>
-              <button type="button" onClick={() => setIsAddBookModalOpen(false)} className="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-600 font-semibold text-sm hover:bg-gray-50">
+            <div className='flex flex-col-reverse sm:flex-row justify-between items-center gap-3 mt-4'>
+              <button type="button" onClick={() => setIsAddBookModalOpen(false)} className="w-full sm:w-auto px-5 py-2.5 rounded-xl border border-gray-200 text-gray-600 font-semibold text-sm hover:bg-gray-50">
                 Cancel
               </button>
-              <button type="submit" className="px-5 py-2.5 rounded-xl bg-[#41431B] text-[#F8F3E1] font-semibold text-sm shadow-md hover:bg-[#2b2d12]">
+              <button type="submit" className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-[#41431B] text-[#F8F3E1] font-semibold text-sm shadow-md hover:bg-[#2b2d12]">
                 Save Changes
               </button>
             </div>
@@ -303,4 +307,3 @@ export default function AdminDashboard() {
     </div>
   );
 }
-

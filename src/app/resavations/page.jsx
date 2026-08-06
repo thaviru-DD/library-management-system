@@ -110,7 +110,7 @@ export default function ReservationsPage() {
               You haven't reserved any books yet. Head over to our collection to borrow your next read.
             </p>
             <Link 
-              href="/categories" 
+              href="/books" 
               className="bg-[#41431B] text-[#F8F3E1] px-6 py-3 rounded-xl text-sm font-semibold hover:bg-[#2b2d12] transition-colors shadow-md"
             >
               Browse Books
