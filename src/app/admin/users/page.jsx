@@ -33,13 +33,9 @@ export default function UsersManagementPage() {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [Open, setOpen] = useState(false);
 
-  // Filter state — these now actually drive the table
   const [roleFilter, setRoleFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
 
-  // FIX: this used to read from `initialUsers` (the static mock array), so
-  // status changes on `users` never showed up in the table. It now reads
-  // from `users` and also applies the Role/Status filters.
   const filteredMembers = users.filter((user) => {
     const query = searchQuery.trim().toLowerCase();
     const matchesSearch =
@@ -53,14 +49,12 @@ export default function UsersManagementPage() {
     return matchesSearch && matchesRole && matchesStatus;
   });
 
-  // Handle individual row selection
   const toggleSelection = (id) => {
     setSelectedUsers(prev =>
       prev.includes(id) ? prev.filter(userId => userId !== id) : [...prev, id]
     );
   };
 
-  // Handle "Select All" checkbox — only affects the currently visible (filtered) rows
   const toggleSelectAll = () => {
     const visibleIds = filteredMembers.map((user) => user.id);
     const allVisibleSelected = visibleIds.length > 0 && visibleIds.every((id) => selectedUsers.includes(id));
@@ -72,22 +66,19 @@ export default function UsersManagementPage() {
     }
   };
 
-  // Administrative Action: Change User Status
   const handleStatusChange = (userId, newStatus) => {
     setUsers(users.map(user =>
       user.id === userId ? { ...user, status: newStatus } : user
     ));
   };
 
-  // Bulk Action: Change Status for all selected users
   const handleBulkStatusChange = (newStatus) => {
     setUsers(users.map(user =>
       selectedUsers.includes(user.id) ? { ...user, status: newStatus } : user
     ));
-    setSelectedUsers([]); // Clear selection after action
+    setSelectedUsers([]);
   };
 
-  // ---- REGISTER USER ----
   const handleRegisterUser = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
@@ -106,7 +97,6 @@ export default function UsersManagementPage() {
     setOpen(false);
   };
 
-  // Helpers for styling
   const getStatusStyle = (status) => {
     switch(status) {
       case 'Active': return 'bg-green-100 text-green-700 border-green-200';
@@ -124,29 +114,28 @@ export default function UsersManagementPage() {
     }
   };
 
-  // Helper to get initials for the avatar
   const getInitials = (name) => {
     return name.split(' ').map(n => n[0]).join('').toUpperCase();
   };
 
   return (
-    <div className="min-h-screen bg-[#faf9f6] text-gray-800 font-sans flex">
+    <div className="min-h-screen w-full overflow-x-hidden bg-[#faf9f6] text-gray-800 font-sans">
       <Sidebar />
       
-      <main className="ml-64 flex-1 p-10 flex flex-col gap-8">
+      <main className="md:ml-64 min-w-0 pt-20 md:pt-10 p-4 sm:p-6 md:p-10 flex flex-col gap-6 md:gap-8">
         
         {/* HEADER */}
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
           <div>
-            <h1 className="text-3xl font-extrabold text-[#41431B] tracking-tight">User Management</h1>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#41431B] tracking-tight">User Management</h1>
             <p className="text-sm text-gray-500 mt-1">View registered members, manage roles, and enforce account restrictions.</p>
           </div>
-          <Button style='flex items-center gap-2 bg-[#41431B] text-[#F8F3E1] px-5 py-2.5 rounded-xl font-semibold shadow-md hover:bg-[#2b2d12] transition-colors' name='Register User' icon={<PersonAddOutlinedIcon fontSize="small" />} onClick={() => setOpen(true)}/>
+          <Button style='w-full sm:w-auto flex items-center justify-center gap-2 bg-[#41431B] text-[#F8F3E1] px-5 py-2.5 rounded-xl font-semibold shadow-md hover:bg-[#2b2d12] transition-colors' name='Register User' icon={<PersonAddOutlinedIcon fontSize="small" />} onClick={() => setOpen(true)}/>
         </div>
 
         {/* FILTERS & SEARCH */}
-        <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-wrap gap-4 items-center">
-          <div className="relative flex-1 min-w-[250px]">
+        <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col md:flex-row flex-wrap gap-4 md:items-center">
+          <div className="relative flex-1 min-w-0 md:min-w-[250px]">
             <SearchIcon className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-400" fontSize="small" />
             <input
               type="text"
@@ -157,12 +146,12 @@ export default function UsersManagementPage() {
             />
           </div>
 
-          <div className="flex items-center gap-3">
-            <FilterListIcon className="text-gray-400" />
+          <div className="flex flex-wrap items-center gap-3">
+            <FilterListIcon className="text-gray-400 hidden sm:block" />
             <select
               value={roleFilter}
               onChange={(e) => setRoleFilter(e.target.value)}
-              className="h-11 px-4 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-700 focus:outline-none focus:border-[#41431B] cursor-pointer"
+              className="flex-1 sm:flex-none h-11 px-4 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-700 focus:outline-none focus:border-[#41431B] cursor-pointer"
             >
               <option value="all">All Roles</option>
               <option value="user">Users</option>
@@ -173,7 +162,7 @@ export default function UsersManagementPage() {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="h-11 px-4 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-700 focus:outline-none focus:border-[#41431B] cursor-pointer"
+              className="flex-1 sm:flex-none h-11 px-4 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-700 focus:outline-none focus:border-[#41431B] cursor-pointer"
             >
               <option value="all">All Statuses</option>
               <option value="active">Active</option>
@@ -184,17 +173,17 @@ export default function UsersManagementPage() {
         </div>
 
         {/* DATA TABLE AREA */}
-        <div className="bg-white shadow-sm border border-gray-100 rounded-3xl p-6 flex flex-col">
+        <div className="bg-white shadow-sm border border-gray-100 rounded-3xl p-4 sm:p-6 flex flex-col min-w-0">
           
           {/* Buttons for the Active */}
-          <div className="flex items-center gap-3 mb-6">
+          <div className="flex flex-wrap items-center gap-3 mb-6">
             <Button style='px-4 py-2 bg-orange-50 border border-orange-200 rounded-lg text-sm font-medium text-orange-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-orange-100 transition-colors' name='Deactivate Selected' onClick={() => handleBulkStatusChange('Deactivated')} disabled={selectedUsers.length === 0}/>
             <Button style='px-4 py-2 bg-red-50 border border-red-200 rounded-lg text-sm font-medium text-red-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-red-100 transition-colors' name='Blacklist Selected' onClick={() => handleBulkStatusChange('Blacklisted')} disabled={selectedUsers.length === 0}/>
             <Button style='px-4 py-2 bg-green-50 border border-green-200 rounded-lg text-sm font-medium text-green-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-green-100 transition-colors' name='Activate Selected' onClick={() => handleBulkStatusChange('Active')} disabled={selectedUsers.length === 0}/>
           </div>
 
           {/* Table */}
-          <div className="overflow-x-auto"> 
+          <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0"> 
             <div className="min-w-[900px]">
               {/* Table Header */}
               <div className="flex items-center bg-[#F8F3E1]/60 px-4 py-3 rounded-xl mb-2">
@@ -307,8 +296,8 @@ export default function UsersManagementPage() {
 
         {/* Modal for Registering a New User */}
         <Modal open={Open} onClose={() => setOpen(false)}>
-            <div className='w-full max-w-lg max-h-[85vh] overflow-y-auto pr-1'>
-              <h2 className='text-3xl font-bold text-[#41431B]'>Register user</h2>
+            <div className='w-[85vw] sm:w-full max-w-lg max-h-[85vh] overflow-y-auto pr-1'>
+              <h2 className='text-2xl sm:text-3xl font-bold text-[#41431B]'>Register user</h2>
               <p>Add new member to libruary system</p>
 
               <form onSubmit={handleRegisterUser} className='mt-6 flex flex-col gap-4'>
@@ -332,11 +321,11 @@ export default function UsersManagementPage() {
                   <label htmlFor="tempPassword">Tempory password</label>
                   <input type="password" id="tempPassword" name="tempPassword" required className='w-full mt-2 p-2 border rounded-lg border-gray-200' placeholder='***************' />
                 </div>
-                <div className='flex justify-between items-center mt-4'>
-                  <button type="button" onClick={() => setOpen(false)} className="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-600 font-semibold text-sm hover:bg-gray-50">
+                <div className='flex flex-col-reverse sm:flex-row justify-between items-center gap-3 mt-4'>
+                  <button type="button" onClick={() => setOpen(false)} className="w-full sm:w-auto px-5 py-2.5 rounded-xl border border-gray-200 text-gray-600 font-semibold text-sm hover:bg-gray-50">
                     Cancel
                   </button>
-                  <button type="submit" className="px-5 py-2.5 rounded-xl bg-[#41431B] text-[#F8F3E1] font-semibold text-sm shadow-md hover:bg-[#2b2d12]">
+                  <button type="submit" className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-[#41431B] text-[#F8F3E1] font-semibold text-sm shadow-md hover:bg-[#2b2d12]">
                     Save Changes
                   </button>
                 </div>

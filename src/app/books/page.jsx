@@ -54,7 +54,7 @@ function Page() {
   return (
     <div className='bg-[#FBF6EC] min-h-screen'>
 
-      <Navbar style='text-[#3D2B1F]' titleStyle='text-[#3D2B1F]'/>
+      <Navbar style='text-[#3D2B1F] ' titleStyle='text-[#3D2B1F]' navbarStyle='bg-[#FBF6EC]'/>
 
       <main className="flex-1 overflow-x-hidden">
 

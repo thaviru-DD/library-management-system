@@ -47,7 +47,7 @@ function Navbar(props) {
   }
 
   return (
-    <div className="fixed top-0 left-0 w-full z-50">
+    <div className={`fixed top-0 left-0 w-full z-50 ${props.navbarStyle}`}>
       <div className="flex justify-between items-center px-6 md:px-20 py-4 md:py-5">
 
         {/* Logo */}

@@ -57,7 +57,7 @@ export default function CategoryPage() {
 
   return (
     <div className='bg-[#FBF6EC] min-h-screen flex flex-col'>
-      <Navbar style='text-[#3D2B1F]' titleStyle='text-[#3D2B1F]'/>
+      <Navbar style='text-[#3D2B1F]' titleStyle='text-[#3D2B1F]' navbarStyle='bg-[#FBF6EC]'/>
 
       <main className="flex-1 overflow-x-hidden">
         {/* HERO */}

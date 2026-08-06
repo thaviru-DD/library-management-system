@@ -22,7 +22,6 @@ import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutli
 import Modal from '@/components/shared/Modal';
 
 // Mock Data
-// NOTE: added `isActive` so a book can be deactivated without losing its borrow status
 const initialBooks = [
   { id: '1', cover: '/bookCovers/book1.jpg', title: 'The Great Gatsby', author: 'Amélie Laurent', category: 'Fiction', status: 'Available', isbn: '978-4-16', isActive: true },
   { id: '2', cover: '/bookCovers/book2.jpg', title: '1984', author: 'George Orwell', category: 'Fiction', status: 'Reserved', isbn: '462-3-12', isActive: true },
@@ -31,26 +30,16 @@ const initialBooks = [
 ];
 
 export default function BooksManagementPage() {
-  // STATE
   const [books, setBooks] = useState(initialBooks);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedBooks, setSelectedBooks] = useState([]);
-
-  // Filter state
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
-
-  // Add Modal State
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState(null);
-
-  // Edit Modal State
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [editFormData, setEditFormData] = useState([]); // Array to handle batch edits
+  const [editFormData, setEditFormData] = useState([]);
 
-  // ---- FILTERING ----
-  // Categories are derived from the actual book list so this stays correct
-  // even after new books/categories are added.
   const categories = [...new Set(books.map((book) => book.category))];
 
   const filteredBooks = books.filter((book) => {
@@ -71,14 +60,12 @@ export default function BooksManagementPage() {
     return matchesSearch && matchesCategory && matchesStatus;
   });
 
-  // Handle individual row selection
   const toggleSelection = (id) => {
     setSelectedBooks((prev) =>
       prev.includes(id) ? prev.filter((bookId) => bookId !== id) : [...prev, id]
     );
   };
 
-  // Handle "Select All" checkbox — only affects the currently visible (filtered) rows
   const toggleSelectAll = () => {
     const visibleIds = filteredBooks.map((book) => book.id);
     const allVisibleSelected = visibleIds.length > 0 && visibleIds.every((id) => selectedBooks.includes(id));
@@ -90,7 +77,6 @@ export default function BooksManagementPage() {
     }
   };
 
-  // ---- ADD BOOK ----
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -120,10 +106,8 @@ export default function BooksManagementPage() {
     setIsAddModalOpen(false);
   };
 
-  // ---- EDIT BOOK ----
   const handleOpenEditModal = () => {
     const booksToEdit = books.filter((book) => selectedBooks.includes(book.id));
-    // Create a deep copy of selected books to use as isolated form state
     setEditFormData(JSON.parse(JSON.stringify(booksToEdit)));
     setIsEditModalOpen(true);
   };
@@ -144,7 +128,6 @@ export default function BooksManagementPage() {
 
   const handleSaveEdits = (e) => {
     e.preventDefault();
-    // Map over existing books, apply updates if the book was edited
     setBooks((prevBooks) =>
       prevBooks.map((book) => {
         const editedBook = editFormData.find((b) => b.id === book.id);
@@ -152,19 +135,15 @@ export default function BooksManagementPage() {
       })
     );
     setIsEditModalOpen(false);
-    setSelectedBooks([]); // Clear selection after successful edit
+    setSelectedBooks([]);
   };
 
-  // ---- DEACTIVATE BOOK ----
-  // Soft-delete: flips isActive instead of removing the book from the array,
-  // so it stays in the system (matches the "no real backend, mock data" setup)
   const handleDeactivateBook = (id) => {
     setBooks((prev) =>
       prev.map((book) => (book.id === id ? { ...book, isActive: !book.isActive } : book))
     );
   };
 
-  // Bulk version, reused by "Delete Selected" so it isn't dead UI
   const handleDeactivateSelected = () => {
     setBooks((prev) =>
       prev.map((book) =>
@@ -174,8 +153,6 @@ export default function BooksManagementPage() {
     setSelectedBooks([]);
   };
 
-  // ---- ASSIGN CATEGORY ----
-  // Applies a category to every currently selected book, then clears the selection
   const handleAssignCategory = (category) => {
     if (!category) return;
     setBooks((prev) =>
@@ -184,7 +161,6 @@ export default function BooksManagementPage() {
     setSelectedBooks([]);
   };
 
-  // Helper for dynamic status colors
   const getStatusStyle = (status) => {
     switch (status) {
       case 'Available':
@@ -199,24 +175,22 @@ export default function BooksManagementPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#faf9f6] text-gray-800 font-sans flex overflow-hidden">
+    <div className="min-h-screen w-full overflow-x-hidden bg-[#faf9f6] text-gray-800 font-sans">
       <Sidebar />
 
-      <main className="ml-64 flex-1 p-10 flex flex-col gap-8 relative">
+      <main className="md:ml-64 min-w-0 pt-20 md:pt-10 p-4 sm:p-6 md:p-10 flex flex-col gap-6 md:gap-8 relative">
 
-        {/* HEADER */}
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
           <div>
-            <h1 className="text-3xl font-extrabold text-[#41431B] tracking-tight">Books Management</h1>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#41431B] tracking-tight">Books Management</h1>
             <p className="text-sm text-gray-500 mt-1">Manage your library inventory, track statuses, and add new books.</p>
           </div>
 
-          <Button name='Add New Book' style='flex items-center gap-2 bg-[#41431B] text-[#F8F3E1] px-5 py-2.5 rounded-xl font-semibold shadow-md hover:bg-[#2b2d12] transition-colors cursor-pointer' icon={<AddIcon fontSize="small" />} onClick={() => setIsAddModalOpen(true)}/>
+          <Button name='Add New Book' style='w-full sm:w-auto flex items-center justify-center gap-2 bg-[#41431B] text-[#F8F3E1] px-5 py-2.5 rounded-xl font-semibold shadow-md hover:bg-[#2b2d12] transition-colors cursor-pointer' icon={<AddIcon fontSize="small" />} onClick={() => setIsAddModalOpen(true)}/>
         </div>
 
-        {/* FILTERS & SEARCH */}
-        <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-wrap gap-4 items-center">
-          <div className="relative flex-1 min-w-[250px]">
+        <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col md:flex-row flex-wrap gap-4 md:items-center">
+          <div className="relative flex-1 min-w-0 md:min-w-[250px]">
             <SearchIcon className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-400" fontSize="small" />
             <input
               type="text"
@@ -227,12 +201,12 @@ export default function BooksManagementPage() {
             />
           </div>
 
-          <div className="flex items-center gap-3">
-            <FilterListIcon className="text-gray-400" />
+          <div className="flex flex-wrap items-center gap-3">
+            <FilterListIcon className="text-gray-400 hidden sm:block" />
             <select
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className="h-11 px-4 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-700 focus:outline-none focus:border-[#41431B] cursor-pointer"
+              className="flex-1 sm:flex-none h-11 px-4 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-700 focus:outline-none focus:border-[#41431B] cursor-pointer"
             >
               <option value="all">All Categories</option>
               {categories.map((category) => (
@@ -243,7 +217,7 @@ export default function BooksManagementPage() {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="h-11 px-4 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-700 focus:outline-none focus:border-[#41431B] cursor-pointer"
+              className="flex-1 sm:flex-none h-11 px-4 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-700 focus:outline-none focus:border-[#41431B] cursor-pointer"
             >
               <option value="all">All Statuses</option>
               <option value="available">Available</option>
@@ -254,11 +228,9 @@ export default function BooksManagementPage() {
           </div>
         </div>
 
-        {/* DATA TABLE AREA */}
-        <div className="bg-white shadow-sm border border-gray-100 rounded-3xl p-6 flex flex-col">
+        <div className="bg-white shadow-sm border border-gray-100 rounded-3xl p-4 sm:p-6 flex flex-col min-w-0">
 
-          {/* Bulk Actions */}
-          <div className="flex items-center gap-3 mb-6">
+          <div className="flex flex-wrap items-center gap-3 mb-6">
             <Button name={`Edit Selected (${selectedBooks.length})`} disabled={selectedBooks.length === 0} onClick={handleOpenEditModal} style='px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm font-medium text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 transition-colors'/>
             <Button name='Deactivate Selected' disabled={selectedBooks.length === 0} onClick={handleDeactivateSelected} style='px-4 py-2 bg-red-50 border border-red-100 rounded-lg text-sm font-medium text-red-600 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-red-100 transition-colors'/>
 
@@ -275,10 +247,8 @@ export default function BooksManagementPage() {
             </select>
           </div>
 
-          {/* Table */}
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
             <div className="min-w-[900px]">
-              {/* Table Header */}
               <div className="flex items-center bg-[#F8F3E1]/60 px-4 py-3 rounded-xl mb-2">
                 <div className="w-12 flex justify-center">
                   <input
@@ -296,7 +266,6 @@ export default function BooksManagementPage() {
                 <h3 className="w-28 text-center font-bold text-xs uppercase tracking-wider text-gray-500">Actions</h3>
               </div>
 
-              {/* Table Body */}
               <div className="flex flex-col">
                 {filteredBooks.length === 0 && (
                   <p className="text-center text-sm text-gray-400 py-10">No books match your search or filters.</p>
@@ -309,7 +278,6 @@ export default function BooksManagementPage() {
                     animate={{ opacity: 1, y: 0 }}
                     className={`flex items-center px-4 py-3 border-b border-gray-50 last:border-0 hover:bg-gray-50 transition-colors rounded-xl group ${selectedBooks.includes(book.id) ? 'bg-[#AEB784]/10' : ''} ${!book.isActive ? 'opacity-50' : ''}`}
                   >
-                    {/* Checkbox */}
                     <div className="w-12 flex justify-center">
                       <input
                         type="checkbox"
@@ -319,37 +287,31 @@ export default function BooksManagementPage() {
                       />
                     </div>
 
-                    {/* Cover */}
                     <div className="w-16 flex justify-center">
                       <div className="relative w-10 h-14 shadow-sm rounded-md overflow-hidden bg-gray-200 border border-gray-100">
                         <Image src={book.cover} alt={book.title} fill className="object-cover" />
                       </div>
                     </div>
 
-                    {/* Title & Author */}
                     <div className="flex-1 pl-4 flex flex-col">
                       <span className="text-sm font-bold text-gray-800">{book.title}</span>
                       <span className="text-xs text-gray-500 mt-0.5">{book.author}</span>
                     </div>
 
-                    {/* Category */}
                     <div className="w-32 text-left text-sm font-medium text-gray-600">
                       {book.category}
                     </div>
 
-                    {/* Status */}
                     <div className="w-28 flex justify-center">
                       <span className={`text-xs font-bold px-3 py-1 rounded-full ${!book.isActive ? 'bg-gray-200 text-gray-500' : getStatusStyle(book.status)}`}>
                         {!book.isActive ? 'Deactivated' : book.status}
                       </span>
                     </div>
 
-                    {/* ISBN */}
                     <div className="w-32 text-center text-sm text-gray-500 font-mono">
                       {book.isbn}
                     </div>
 
-                    {/* Actions */}
                     <div className="w-28 flex justify-center gap-1 ">
                       <button className="p-1.5 hover:bg-gray-200 rounded-full transition-colors text-gray-500 hover:text-[#41431B]" title="View Details">
                         <RemoveRedEyeOutlinedIcon fontSize="small" />
@@ -381,10 +343,9 @@ export default function BooksManagementPage() {
         </div>
       </main>
 
-      {/* EDIT SELECTED MODAL */}
       <AnimatePresence>
         {isEditModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4">
             <motion.div
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
               onClick={() => setIsEditModalOpen(false)}
@@ -395,24 +356,23 @@ export default function BooksManagementPage() {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative bg-white w-full max-w-2xl rounded-3xl shadow-2xl p-8 z-10 max-h-[85vh] flex flex-col"
+              className="relative bg-white w-full max-w-2xl rounded-2xl sm:rounded-3xl shadow-2xl p-4 sm:p-8 z-10 max-h-[90vh] flex flex-col"
             >
-              <div className="flex justify-between items-center mb-6">
+              <div className="flex justify-between items-center mb-4 sm:mb-6">
                 <div>
-                  <h2 className="text-2xl font-bold text-[#41431B]">Edit Books</h2>
+                  <h2 className="text-xl sm:text-2xl font-bold text-[#41431B]">Edit Books</h2>
                   <p className="text-sm text-gray-500 mt-1">Editing {editFormData.length} selected book(s)</p>
                 </div>
-                <button onClick={() => setIsEditModalOpen(false)} className="p-2 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors">
+                <button onClick={() => setIsEditModalOpen(false)} className="p-2 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors flex-shrink-0">
                   <CloseIcon fontSize="small" className="text-gray-600" />
                 </button>
               </div>
 
-              <form onSubmit={handleSaveEdits} className="flex-1 overflow-y-auto pr-2">
+              <form onSubmit={handleSaveEdits} className="flex-1 overflow-y-auto pr-1 sm:pr-2">
                 {editFormData.map((book, index) => (
                   <div key={book.id} className={`flex flex-col gap-4 pb-6 mb-6 ${index !== editFormData.length - 1 ? 'border-b border-gray-100' : ''}`}>
 
-                    {/* Cover Image Upload (Edit) */}
-                    <div className="flex gap-6 items-center bg-gray-50 p-4 rounded-2xl border border-dashed border-gray-300">
+                    <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 items-start sm:items-center bg-gray-50 p-4 rounded-2xl border border-dashed border-gray-300">
                       <div className="relative w-16 h-24 bg-gray-200 rounded-lg overflow-hidden shadow-sm border border-gray-100 flex-shrink-0">
                         <Image src={book.cover} alt="Cover Preview" fill className="object-cover" />
                       </div>
@@ -426,7 +386,6 @@ export default function BooksManagementPage() {
                       </div>
                     </div>
 
-                    {/* Text Inputs */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="flex flex-col gap-1.5">
                         <label className="text-sm font-bold text-gray-700">Book Title</label>
@@ -474,7 +433,7 @@ export default function BooksManagementPage() {
                   </div>
                 ))}
 
-                <div className="flex justify-end gap-3 pt-4 border-t border-gray-100 mt-2">
+                <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-3 pt-4 border-t border-gray-100 mt-2">
                   <button type="button" onClick={() => setIsEditModalOpen(false)} className="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-600 font-semibold text-sm hover:bg-gray-50">
                     Cancel
                   </button>
@@ -488,13 +447,12 @@ export default function BooksManagementPage() {
         )}
       </AnimatePresence>
 
-      {/* MODAL FOR ADDING A NEW BOOK */}
       <Modal open={isAddModalOpen} onClose={() => setIsAddModalOpen(false)}>
-        <div className='w-full max-w-lg max-h-[85vh] overflow-y-auto pr-1'>
-          <h2 className='text-3xl font-bold text-[#41431B]'>Add new book</h2>
+        <div className='w-[85vw] sm:w-full max-w-lg max-h-[85vh] overflow-y-auto pr-1'>
+          <h2 className='text-2xl sm:text-3xl font-bold text-[#41431B]'>Add new book</h2>
           <p>Add new book to library system</p>
 
-          <div className="flex gap-6 items-center bg-gray-50 p-4 rounded-2xl border border-dashed border-gray-300 mt-4">
+          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 items-start sm:items-center bg-gray-50 p-4 rounded-2xl border border-dashed border-gray-300 mt-4">
             <div className="relative w-20 h-28 bg-gray-200 rounded-lg overflow-hidden shadow-sm border border-gray-100 flex-shrink-0">
               {previewImage ? (
                 <Image src={previewImage} alt="Preview" fill className="object-cover" />
@@ -515,7 +473,7 @@ export default function BooksManagementPage() {
           </div>
 
           <form onSubmit={handleAddBook} className='mt-6 flex flex-col gap-4'>
-            <div className='grid grid-cols-2 gap-6'>
+            <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6'>
               <div>
                 <label htmlFor="title">Book name</label>
                 <input type="text" id="title" name="title" required className='w-full mt-2 p-2 border rounded-lg border-gray-200' placeholder='Enter book name'/>
@@ -525,7 +483,7 @@ export default function BooksManagementPage() {
                 <input type="text" id="author" name="author" required className='w-full mt-2 p-2 border rounded-lg border-gray-200' placeholder='Enter book author'/>
               </div>
             </div>
-            <div className='grid grid-cols-2 gap-6'>
+            <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6'>
               <div>
                 <label htmlFor="category">Category</label>
                 <input type="text" id="category" name="category" className='w-full mt-2 p-2 border rounded-lg border-gray-200' placeholder='History'/>
@@ -539,11 +497,11 @@ export default function BooksManagementPage() {
               <label htmlFor="description">Description</label>
               <textarea id="description" name="description" rows={3} className='w-full mt-2 p-2 border rounded-lg border-gray-200' placeholder='Short description (optional)'/>
             </div>
-            <div className='flex justify-between items-center mt-4'>
-              <button type="button" onClick={() => setIsAddModalOpen(false)} className="px-5 py-2.5 rounded-xl border border-gray-200 text-gray-600 font-semibold text-sm hover:bg-gray-50">
+            <div className='flex flex-col-reverse sm:flex-row justify-between items-center gap-3 mt-4'>
+              <button type="button" onClick={() => setIsAddModalOpen(false)} className="w-full sm:w-auto px-5 py-2.5 rounded-xl border border-gray-200 text-gray-600 font-semibold text-sm hover:bg-gray-50">
                 Cancel
               </button>
-              <button type="submit" className="px-5 py-2.5 rounded-xl bg-[#41431B] text-[#F8F3E1] font-semibold text-sm shadow-md hover:bg-[#2b2d12]">
+              <button type="submit" className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-[#41431B] text-[#F8F3E1] font-semibold text-sm shadow-md hover:bg-[#2b2d12]">
                 Save Changes
               </button>
             </div>
